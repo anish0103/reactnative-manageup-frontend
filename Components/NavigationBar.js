@@ -45,7 +45,7 @@ const NavigationBar = () => {
         options={{
           tabBarIcon: ({ focused }) => {
             return (
-              <AntDesign color={focused ? "#246bfb" : "black"} name="pluscircleo" size={28} />
+              <AntDesign color={focused ? "#246bfb" : "#646464"} name="pluscircleo" size={28} />
             )
           }
         }}

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 
 const Header = props => {
     return (
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     headerTitle: {
-        fontSize: 27,
+        fontSize: Dimensions.get('window').scale < 2 ? 30 : 27,
         fontWeight: "bold",
         textAlign: "center"
     },
