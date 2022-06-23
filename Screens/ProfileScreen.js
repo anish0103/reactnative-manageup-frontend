@@ -1,20 +1,115 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from "react-native";
+import { AntDesign } from '@expo/vector-icons';
 
 const ProfileScreen = () => {
     return (
         <View style={styles.container}>
-            <Text>Profile Screen</Text>
+            <View style={styles.imageContainer}>
+                <Image style={styles.image} source={require('../assets/avatar.png')} />
+            </View>
+            <View style={styles.textContainer}>
+                <Text style={styles.nameText}>Anish Patel</Text>
+                <Text style={styles.emailText}>xyz@gmail.com</Text>
+            </View>
+            <View style={styles.ButtonContainer}>
+                <TouchableOpacity activeOpacity={0.6}>
+                    <Text style={styles.editText}>Edit Profile</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.extraMainContainer}>
+                <View style={styles.extraContainer}>
+                    <Text style={styles.extraHeadingText}>Extra</Text>
+                    <TouchableOpacity activeOpacity={0.6} style={styles.extraTextContainer}>
+                        <Text style={styles.extraText}>Help</Text>
+                        <AntDesign name="right" size={18} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity activeOpacity={0.6} style={styles.extraTextContainer}>
+                        <Text style={styles.extraText}>Rate this app</Text>
+                        <AntDesign name="right" size={18} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity activeOpacity={0.6} style={styles.extraTextContainer}>
+                        <Text style={styles.extraText}>Privacy & Policy</Text>
+                        <AntDesign name="right" size={18} color="black" />
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.ButtonContainer}>
+                <TouchableOpacity activeOpacity={0.6}>
+                    <Text style={styles.logOutText}>Log Out</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        height: "88%",
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "white",
+        paddingBottom: 65
+    },
+    imageContainer: {
+        width: 150,
+        height: 150,
+        borderRadius: '50%',
+    },
+    image: {
+        width: '100%',
+        height: '100%'
+    },
+    textContainer: {
+        width: '100%',
+        marginVertical: 15
+    },
+    nameText: {
+        textAlign: "center",
+        fontSize: Dimensions.get('window').scale < 2 ? 38 : 32,
+        fontWeight: "500"
+    },
+    emailText: {
+        textAlign: "center",
+        fontSize: 15,
+        color: "#646464",
+    },
+    ButtonContainer: {
+        width: "100%",
+        alignItems: "center"
+    },
+    editText: {
+        fontSize: Dimensions.get('window').scale < 2 ? 22 : 16,
+        fontWeight: "500",
+        color: "#246bfb"
+    },
+    logOutText: {
+        fontSize: Dimensions.get('window').scale < 2 ? 30 : 24,
+        fontWeight: "500",
+        color: "#f56d6d"
+    },
+    extraMainContainer: {
+        alignItems: "center",
+        width: '100%',
+        marginVertical: Dimensions.get('window').scale < 2 ? 25 : 15
+    },
+    extraContainer: {
+        width: '90%',
+    },
+    extraHeadingText: {
+        fontSize: Dimensions.get('window').scale < 2 ? 34 : 28,
+        fontWeight: "500",
+        marginBottom: Dimensions.get('window').scale < 2 ? 25 : 15
+    },
+    extraText: {
+        fontSize: Dimensions.get('window').scale < 2 ? 22 : 18,
+        fontWeight: "500",
+        color: "#646464",
+        flex: 1
+    },
+    extraTextContainer: {
+        flexDirection: "row",
+        paddingVertical: Dimensions.get('window').scale < 2 ? 10 : 8
     }
 });
 

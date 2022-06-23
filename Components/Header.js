@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     headerContainer: {
         height: 80,
         paddingTop: 35,
-        position: "relative"
+        position: "relative",
+        backgroundColor: "white"
     },
     headerTitle: {
         fontSize: Dimensions.get('window').scale < 2 ? 30 : 27,
