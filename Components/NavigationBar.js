@@ -58,7 +58,7 @@ const NavigationBar = () => {
             )
           }
         }}
-        name="Chat" component={ChatMainScreen} />
+        name="Chat List" component={ChatMainScreen} />
       <Tab.Screen
         options={{
           tabBarIcon: ({ focused }) => {

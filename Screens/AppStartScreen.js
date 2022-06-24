@@ -1,14 +1,47 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
+import {React, useEffect} from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Animated } from "react-native";
 
 const AppStartScreen = () => {
+    const translation = new Animated.Value(100);
+    const opacity = new Animated.Value(0);
+
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 1,
+                useNativeDriver: true,
+                duration: 1000
+            }),
+            Animated.timing(translation, {
+                toValue: 0,
+                useNativeDriver: true,
+                duration: 1000
+            })
+        ]).start();
+    }, [])
+
+    const RevertAnimation = () => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 0,
+                useNativeDriver: true,
+                duration: 1000
+            }),
+            Animated.timing(translation, {
+                toValue: -100,
+                useNativeDriver: true,
+                duration: 1000
+            })
+        ]).start();
+    }
 
     const ButtonHandler = () => {
+        RevertAnimation();
         console.log("Button is Clicked!!");
     }
 
     return (
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, { transform: [{ translateY: translation }], opacity: opacity }]}>
             <View style={styles.imageContainer}>
                 <Image style={styles.image} source={require('../assets/appstartimage.jpg')} />
             </View>
@@ -20,7 +53,7 @@ const AppStartScreen = () => {
                     <Text style={styles.signInText}>Sign In</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </Animated.View>
     )
 }
 

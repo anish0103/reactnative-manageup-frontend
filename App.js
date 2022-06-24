@@ -7,6 +7,9 @@ import SignInScreen from './Screens/SignInScreen';
 import SignUpScreen from './Screens/SignUpScreen';
 import CreateProjectScreen from './Screens/CreateProjectScreen';
 import CreateTaskScreen from './Screens/CreateTaskScreen';
+import ChatScreen from './Screens/ChatScreen';
+import TaskDetailScreen from './Screens/TaskDetailScreen'
+import ProjectDetailScreen from './Screens/ProjectDetailScreen';
 
 export default function App() {
   return (
@@ -18,6 +21,9 @@ export default function App() {
     // <SignInScreen />
     // <SignUpScreen />
     // <CreateProjectScreen />
-    <CreateTaskScreen />
+    // <CreateTaskScreen />
+    // <ChatScreen />
+    // <TaskDetailScreen />
+    <ProjectDetailScreen />
   );
 }

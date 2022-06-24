@@ -1,18 +1,51 @@
-import {React, useState} from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { React, useState, useEffect } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, Animated } from "react-native";
 
 const SignUpScreen = () => {
 
     const [email, setEmail] = useState(undefined)
     const [password, setPassword] = useState(undefined)
     const [name, setName] = useState(undefined)
+    const translation = new Animated.Value(100);
+    const opacity = new Animated.Value(0);
+
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 1,
+                useNativeDriver: true,
+                duration: 1000
+            }),
+            Animated.timing(translation, {
+                toValue: 0,
+                useNativeDriver: true,
+                duration: 1000
+            })
+        ]).start();
+    }, [])
+
+    const RevertAnimation = () => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 0,
+                useNativeDriver: true,
+                duration: 1000
+            }),
+            Animated.timing(translation, {
+                toValue: -100,
+                useNativeDriver: true,
+                duration: 1000
+            })
+        ]).start();
+    }
 
     const ButtonHandler = () => {
-        const FormData = {Name: name, Email: email, Password: password}
+        const FormData = { Name: name, Email: email, Password: password }
         console.log(FormData);
         setName(undefined)
         setEmail(undefined)
         setPassword(undefined)
+        RevertAnimation()
     }
 
     const keyboardHandler = () => {
@@ -21,7 +54,7 @@ const SignUpScreen = () => {
 
     return (
         <TouchableWithoutFeedback onPress={keyboardHandler}>
-            <View style={styles.container}>
+            <Animated.View style={[styles.container, { transform: [{ translateY: translation }], opacity: opacity }]}>
                 <View style={styles.haveAccountTextContainer}>
                     <Text style={styles.haveAccountText}>Have Account?Log In</Text>
                 </View>
@@ -34,15 +67,15 @@ const SignUpScreen = () => {
                 <View>
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputLable}>YOUR NAME</Text>
-                        <TextInput value={name} onChangeText={(data)=> setName(data)} style={styles.inputText} />
+                        <TextInput value={name} onChangeText={(data) => setName(data)} style={styles.inputText} />
                     </View>
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputLable}>YOUR EMAIL</Text>
-                        <TextInput keyboardType="email-address" value={email} onChangeText={(data)=> setEmail(data)} style={styles.inputText} />
+                        <TextInput keyboardType="email-address" value={email} onChangeText={(data) => setEmail(data)} style={styles.inputText} />
                     </View>
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputLable}>YOUR PASSWORD</Text>
-                        <TextInput secureTextEntry={true} value={password} onChangeText={(data)=> setPassword(data)} style={styles.inputText} />
+                        <TextInput secureTextEntry={true} value={password} onChangeText={(data) => setPassword(data)} style={styles.inputText} />
                     </View>
                 </View>
                 <View style={styles.buttonContainer}>
@@ -50,7 +83,7 @@ const SignUpScreen = () => {
                         <Text style={styles.signInText}>Continue</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </Animated.View>
         </TouchableWithoutFeedback>
     )
 }

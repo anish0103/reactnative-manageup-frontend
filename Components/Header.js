@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     },
     headerTitle: {
-        fontSize: Dimensions.get('window').scale < 2 ? 30 : 27,
+        fontSize: Dimensions.get('window').scale < 2 ? 28 : 25,
         fontWeight: "bold",
         textAlign: "center"
     },
@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
         height: 35,
         width: 35,
         right: 15,
-        bottom: 10
+        bottom: 10,
+        borderRadius: '50%',
     },
     profileImage: {
         width: '100%',

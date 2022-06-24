@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "white",
-        paddingBottom: 65
+        paddingBottom: '15%',
     },
     imageContainer: {
         width: 150,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     },
     nameText: {
         textAlign: "center",
-        fontSize: Dimensions.get('window').scale < 2 ? 38 : 32,
+        fontSize: Dimensions.get('window').scale < 2 ? 35 : 32,
         fontWeight: "500"
     },
     emailText: {
@@ -79,19 +79,19 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     editText: {
-        fontSize: Dimensions.get('window').scale < 2 ? 22 : 16,
+        fontSize: Dimensions.get('window').scale < 2 ? 20 : 16,
         fontWeight: "500",
         color: "#246bfb"
     },
     logOutText: {
-        fontSize: Dimensions.get('window').scale < 2 ? 30 : 24,
+        fontSize: Dimensions.get('window').scale < 2 ? 28 : 24,
         fontWeight: "500",
         color: "#f56d6d"
     },
     extraMainContainer: {
         alignItems: "center",
         width: '100%',
-        marginVertical: Dimensions.get('window').scale < 2 ? 25 : 15
+        marginVertical: Dimensions.get('window').scale < 2 ? 22 : 15
     },
     extraContainer: {
         width: '90%',
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         marginBottom: Dimensions.get('window').scale < 2 ? 25 : 15
     },
     extraText: {
-        fontSize: Dimensions.get('window').scale < 2 ? 22 : 18,
+        fontSize: Dimensions.get('window').scale < 2 ? 21 : 18,
         fontWeight: "500",
         color: "#646464",
         flex: 1

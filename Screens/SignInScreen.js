@@ -1,16 +1,49 @@
-import {React, useState} from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import {React, useState, useEffect} from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, Animated } from "react-native";
 
 const SignInScreen = () => {
-
     const [email, setEmail] = useState(undefined)
     const [password, setPassword] = useState(undefined)
+
+    const translation = new Animated.Value(100);
+    const opacity = new Animated.Value(0);
+
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 1,
+                useNativeDriver: true,
+                duration: 1000
+            }),
+            Animated.timing(translation, {
+                toValue: 0,
+                useNativeDriver: true,
+                duration: 1000
+            })
+        ]).start();
+    }, [])
+
+    const RevertAnimation = () => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 0,
+                useNativeDriver: true,
+                duration: 1000
+            }),
+            Animated.timing(translation, {
+                toValue: -100,
+                useNativeDriver: true,
+                duration: 1000
+            })
+        ]).start();
+    }
 
     const ButtonHandler = () => {
         const FormData = {Email: email, Password: password}
         console.log(FormData);
-        setName(undefined)
+        setPassword(undefined)
         setEmail(undefined)
+        RevertAnimation()
     }
 
     const keyboardHandler = () => {
@@ -19,7 +52,7 @@ const SignInScreen = () => {
 
     return (
         <TouchableWithoutFeedback onPress={keyboardHandler}>
-            <View style={styles.container}>
+            <Animated.View style={[styles.container, { transform: [{ translateY: translation }], opacity: opacity }]}>
                 <View style={styles.createAccountTextContainer}>
                     <Text style={styles.createAccountText}>Create a Account</Text>
                 </View>
@@ -44,7 +77,7 @@ const SignInScreen = () => {
                         <Text style={styles.signInText}>Continue</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </Animated.View>
         </TouchableWithoutFeedback>
     )
 }
