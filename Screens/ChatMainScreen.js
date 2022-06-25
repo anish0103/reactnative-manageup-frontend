@@ -89,12 +89,11 @@ const styles = StyleSheet.create({
         width: 52,
         height: 52,
         borderRadius: 200,
-        borderWidth: 1.5,
-        borderColor: '#246bfb',
         overflow: "hidden",
         justifyContent: "center",
         alignItems: "center",
-        marginRight: 10
+        marginRight: 10,
+        backgroundColor: "#f5f5f6"
     },
     chatProfileName: {
         fontSize: Dimensions.get('window').scale < 2 ? 25 : 22,

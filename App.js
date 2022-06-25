@@ -13,9 +13,9 @@ import ProjectDetailScreen from './Screens/ProjectDetailScreen';
 
 export default function App() {
   return (
-    // <NavigationContainer>
-    //   <NavigationBar />
-    // </NavigationContainer>
+    <NavigationContainer>
+      <NavigationBar />
+    </NavigationContainer>
     // <IntroScreen />
     // <AppStartScreen />
     // <SignInScreen />
@@ -24,6 +24,6 @@ export default function App() {
     // <CreateTaskScreen />
     // <ChatScreen />
     // <TaskDetailScreen />
-    <ProjectDetailScreen />
+    // <ProjectDetailScreen />
   );
 }

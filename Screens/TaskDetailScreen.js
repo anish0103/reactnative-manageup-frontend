@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         width: '90%'
     },
     descriptionText: {
-        fontSize: Dimensions.get('window').scale < 2 ? 19 : 16,
+        fontSize: Dimensions.get('window').scale < 2 ? 17 : 14,
         color: '#646464',
         textAlign: "justify"
     },

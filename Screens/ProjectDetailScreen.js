@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
-import Carousel from 'react-native-snap-carousel'
+// import Carousel from 'react-native-snap-carousel'
 
 import Header from "../Components/Header";
 import TeamMemberCard from "../Components/TeamMemberCard";
@@ -30,20 +30,20 @@ const ProjectDetailScreen = () => {
         Name: "Improve",
         id: Math.random(),
         Status: "pending"
-    },{
+    }, {
         Name: "Maintain",
         id: Math.random(),
         Status: "completed"
-    },{
+    }, {
         Name: "Fix the bug",
         id: Math.random(),
         Status: "pending"
-    },{
+    }, {
         Name: "Authentication",
         id: Math.random(),
         Status: "completed"
     },
-]
+    ]
 
     return (
         <>
@@ -58,8 +58,8 @@ const ProjectDetailScreen = () => {
                         <Text numberOfLines={8} style={styles.descriptionText}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.</Text>
                     </View>
                     <View style={styles.TeamMemberContainer}>
-                        <Text style={[styles.headingText, {marginLeft: '5%'}]}>Team Members</Text>
-                        <Carousel
+                        <Text style={[styles.headingText, { marginLeft: '5%' }]}>Team Members</Text>
+                        {/* <Carousel
                             layout="default"
                             ref={isCarousel}
                             data={data}
@@ -68,14 +68,14 @@ const ProjectDetailScreen = () => {
                             itemWidth={ITEM_WIDTH}
                             inactiveSlideShift={0}
                             useScrollView={true}
-                        />
+                        /> */}
                     </View>
                 </View>
                 <View style={styles.taskContainer}>
-                <Text style={[styles.headingText, {marginLeft: '5%'}]}>All Task</Text>
-                    <ScrollView style={{height: '100%'}}>
-                        <View style={{width: '90%', marginLeft: '5%'}}>
-                            {TaskData.map((data)=> <TaskItemCard data={data} />)}
+                    <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Task</Text>
+                    <ScrollView style={{ height: '100%' }}>
+                        <View style={{ width: '90%', marginLeft: '5%' }}>
+                            {TaskData.map((data) => <TaskItemCard key={data.id} data={data} />)}
                         </View>
                     </ScrollView>
                 </View>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     descriptionText: {
-        fontSize: Dimensions.get('window').scale < 2 ? 19 : 16,
+        fontSize: Dimensions.get('window').scale < 2 ? 17 : 14,
         color: '#646464',
         textAlign: "justify"
     },
