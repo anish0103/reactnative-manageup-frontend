@@ -1,7 +1,27 @@
-import React from "react";
+import { React, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from "react-native";
 
+import ChatScreen from "./ChatScreen";
+
 const ChatMainScreen = () => {
+    const [chatShow, setChatShow] = useState(false)
+    const [chatData, setChatData] = useState(undefined)
+
+    const ToggleHandler = () => {
+        setChatShow(!chatShow)
+    }
+
+    const ClickHandler = (data) => {
+        ToggleHandler();
+        setChatData(data)
+    }
+
+    if (chatShow) {
+        console.log("Chat is Rendering")
+        return (
+            <ChatScreen data={chatData} isVisible={chatShow} ToggleHandler={ToggleHandler} />
+        )
+    }
 
     const Projects = [{
         Name: "Web Dev",
@@ -18,7 +38,7 @@ const ChatMainScreen = () => {
     }, {
         Name: "React Native",
         id: 5,
-    },{
+    }, {
         Name: "Web Dev",
         id: 6,
     }, {
@@ -33,7 +53,7 @@ const ChatMainScreen = () => {
     }, {
         Name: "React Native",
         id: 51,
-    },{
+    }, {
         Name: "Web Dev",
         id: 11,
     }, {
@@ -54,7 +74,7 @@ const ChatMainScreen = () => {
         <View style={styles.container}>
             <ScrollView style={{ width: '100%' }}>
                 {Projects.map((data) => (
-                    <TouchableOpacity  key={data.id} style={styles.chatList}>
+                    <TouchableOpacity onPress={() => ClickHandler(data)} key={data.id} style={styles.chatList}>
                         <View style={styles.imageContainer}>
                             <Text style={styles.chatProfileName}>{data.Name.charAt(0)}</Text>
                         </View>
@@ -100,7 +120,7 @@ const styles = StyleSheet.create({
         color: '#646464',
         fontWeight: "500"
 
-    },  
+    },
     nameText: {
         fontWeight: "500",
         fontSize: Dimensions.get('window').scale < 2 ? 24 : 21

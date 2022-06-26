@@ -1,23 +1,51 @@
-import React from "react";
+import {React, useState} from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
 
+import CreateTaskScreen from "./CreateTaskScreen";
+import CreateProjectScreen from "./CreateProjectScreen";
+
 const CreateScreen = () => {
+    const [taskShow, setTaskShow] = useState(false)
+    const [projectShow, setProjectShow] = useState(false)
+
+    const TaskToggleHandler = () => {
+        setTaskShow(!taskShow)
+    }
+
+    const ProjectToggleHandler = () => {
+        setProjectShow(!projectShow)
+    }
+
+    const AddTaskDataHandler = data => {
+        console.log(data);
+        TaskToggleHandler()
+    }
+
+    const AddProjectDataHandler = data => {
+        console.log(data);
+        ProjectToggleHandler()
+    }
+
     return (
-        <View style={styles.container}>
-            <View style={styles.imageContainer}>
-                <Image style={styles.image} source={require('../assets/createtaskproject.jpg')} />
+        <>
+            <CreateTaskScreen AddTaskDataHandler={AddTaskDataHandler} TaskToggleHandler={TaskToggleHandler} isVisible={taskShow} />
+            <CreateProjectScreen AddProjectDataHandler={AddProjectDataHandler} ProjectToggleHandler={ProjectToggleHandler} isVisible={projectShow} />
+            <View style={styles.container}>
+                <View style={styles.imageContainer}>
+                    <Image style={styles.image} source={require('../assets/createtaskproject.jpg')} />
+                </View>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={()=> ProjectToggleHandler()} activeOpacity={0.6} style={styles.button}>
+                        <Text style={styles.buttonText}>Create Project</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={()=> TaskToggleHandler()} activeOpacity={0.6} style={styles.button}>
+                        <Text style={styles.buttonText}>Create Task</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity activeOpacity={0.6} style={styles.button}>
-                    <Text style={styles.buttonText}>Create Project</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity activeOpacity={0.6} style={styles.button}>
-                    <Text style={styles.buttonText}>Create Task</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+        </>
     )
 }
 

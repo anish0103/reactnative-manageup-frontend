@@ -2,15 +2,19 @@ import { React, useState } from "react";
 import { View, Text, StyleSheet, Keyboard, Dimensions, TextInput, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import DatePicker from 'react-native-neat-date-picker';
 // import RNMultiSelect from "@freakycoder/react-native-multiple-select";
+import Modal from "react-native-modal";
 
-import Header from "../Components/Header";
+import ModalHeader from "../Components/ModalHeader";
+import AlertComponent from "../Components/AlertComponent";
 
-const CreateTaskScreen = () => {
+const CreateTaskScreen = props => {
     const [showDatePicker, setShowDatePicker] = useState(false)
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndtDate] = useState("");
+    const [name, setName] = useState(undefined);
+    const [description, setDescription] = useState(undefined);
+    const [startDate, setStartDate] = useState(undefined);
+    const [endDate, setEndtDate] = useState(undefined);
+    const [selectedContact, setSelectedContact] = useState([]);
+    const [selectedProject, setSelectedProject] = useState([]);
 
     const openDatePicker = () => {
         setShowDatePicker(true)
@@ -27,17 +31,25 @@ const CreateTaskScreen = () => {
     }
 
     const buttonHandler = () => {
-        const ProjectDetails = {
+        const TaskDetails = {
             Name: name,
             Description: description,
             StartDate: startDate,
-            EndDate: endDate
+            EndDate: endDate,
+            SelectedContact: selectedContact,
+            SelectedProject: selectedProject
         }
-        console.log(ProjectDetails)
-        setName("")
-        setEndtDate("")
-        setStartDate("")
-        setDescription("")
+        if (name === undefined || description === undefined || startDate === undefined || endDate === undefined || name.trim().length === 0 || description.trim().length === 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || selectedContact.length === 0 || selectedProject.length === 0) {
+            return AlertComponent("Warning", "Please enter some valid data!!");
+        } else {
+            props.AddTaskDataHandler(TaskDetails)
+            setName(undefined)
+            setEndtDate(undefined)
+            setStartDate(undefined)
+            setDescription(undefined)
+            setSelectedContact([])
+            setSelectedProject([])
+        }
     }
 
     const staticData = [
@@ -86,8 +98,8 @@ const CreateTaskScreen = () => {
     ];
 
     return (
-        <>
-            <Header title={"Create Task"} />
+        <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }} onRequestClose={() => props.TaskToggleHandler()} isVisible={props.isVisible}>
+            <ModalHeader title={"Create Task"} />
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                 <View style={styles.createProjectMainContainer}>
                     <View style={styles.inputContainer}>
@@ -98,7 +110,7 @@ const CreateTaskScreen = () => {
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputName}>Add Description</Text>
                         <TextInput multiline={true}
-                            numberOfLines={5} value={description} onChangeText={(data)=> setDescription(data)} style={styles.input} placeholder="Description" />
+                            numberOfLines={5} value={description} onChangeText={(data) => setDescription(data)} style={styles.input} placeholder="Description" />
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity activeOpacity={0.6} onPress={openDatePicker} style={styles.button}>
@@ -115,11 +127,11 @@ const CreateTaskScreen = () => {
                         <View style={{ width: '50%', alignItems: "center" }}>
                             <Text style={styles.inputName}>Select Project</Text>
                             {/* <RNMultiSelect
-                                width={'90%'}
+                                width={'88%'}
                                 disableAbsolute
                                 data={staticData2}
                                 placeholder="Project"
-                                onSelect={(selectedItems) => console.log("SelectedItems: ", selectedItems)}
+                                onSelect={(selectedItems) => setSelectedProject(selectedItems)}
                             /> */}
                         </View>
                         <View style={{ width: '50%', alignItems: "center" }}>
@@ -128,11 +140,11 @@ const CreateTaskScreen = () => {
                                 <Text style={{ textAlign: "center", fontSize: Dimensions.get('window').scale < 2 ? 17 : 15, fontWeight: "500", color: "#646464" }}>First select the project</Text>
                             </View>
                             {/* <RNMultiSelect
-                                width={'90%'}
+                                width={'88%'}
                                 disableAbsolute
                                 data={staticData}
                                 placeholder="People"
-                                onSelect={(selectedItems) => console.log("SelectedItems: ", selectedItems)}
+                                onSelect={(selectedItems) => setSelectedContact(selectedItems)}
                             /> */}
                         </View>
                     </View>
@@ -143,18 +155,16 @@ const CreateTaskScreen = () => {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-        </>
+        </Modal>
     )
 }
 
 const styles = StyleSheet.create({
     createProjectMainContainer: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: '12%',
+        flex: 1,
         width: '100%',
         alignItems: "center",
+        backgroundColor: "white"
     },
     inputContainer: {
         width: '90%',

@@ -1,18 +1,19 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import Modal from "react-native-modal";
 
-import Header from "../Components/Header";
+import ModalHeader from "../Components/ModalHeader";
 
-const TaskDetailScreen = () => {
+const TaskDetailScreen = props => {
 
-    const status = "pending";
+    const status = props?.data?.Status;
 
     return (
-        <>
-            <Header title={"Task Details"} />
+        <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }}  isVisible={props.isVisible} onRequestClose={() => props.TaskToggleHandler()}>
+            <ModalHeader title={"Task Details"} />
             <View style={styles.container}>
                 <View style={styles.detailContainer}>
-                    <Text style={styles.headingText}>Task Name</Text>
+                    <Text style={styles.headingText}>{props?.data?.Name}</Text>
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.headingText}>Description</Text>
@@ -30,7 +31,7 @@ const TaskDetailScreen = () => {
                     </TouchableOpacity>}
                 </View>
             </View>
-        </>
+        </Modal>
     )
 }
 
@@ -39,7 +40,8 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 10,
         width: '100%',
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "white"
     },
     buttonContainer: {
         width: '100%',

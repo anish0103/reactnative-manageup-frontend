@@ -1,7 +1,7 @@
 import {React, useEffect} from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Animated } from "react-native";
 
-const AppStartScreen = () => {
+const AppStartScreen = props => {
     const translation = new Animated.Value(100);
     const opacity = new Animated.Value(0);
 
@@ -35,9 +35,13 @@ const AppStartScreen = () => {
         ]).start();
     }
 
+    const MoveHandler = () => {
+        props.storeData("Auth");
+    }
+
     const ButtonHandler = () => {
         RevertAnimation();
-        console.log("Button is Clicked!!");
+        setTimeout(MoveHandler, 1000);
     }
 
     return (

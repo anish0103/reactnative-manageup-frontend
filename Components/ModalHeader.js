@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 
-const Header = props => {
+const ModalHeader = props => {
     return (
         <View style={styles.headerContainer}>
             <Text style={styles.headerTitle}>{props.title}</Text>
@@ -14,8 +14,8 @@ const Header = props => {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        height: 80,
-        paddingTop: 35,
+        height: 55,
+        paddingTop: 14,
         position: "relative",
         backgroundColor: "white",
     },
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Header;
+export default ModalHeader;

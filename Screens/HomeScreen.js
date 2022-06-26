@@ -1,14 +1,19 @@
-import React from "react";
+import { React, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
-// import Carousel from 'react-native-snap-carousel'
+import Carousel from 'react-native-snap-carousel'
 
 import TaskItemCard from "../Components/TaskItemCard";
 import ProjectItemCard from "../Components/ProjectItemCard";
+import ProjectDetailScreen from "./ProjectDetailScreen";
+import TaskDetailScreen from "./TaskDetailScreen";
 
 const HomeScreen = () => {
-    const isCarousel = React.useRef(null)
     const SLIDER_WIDTH = Dimensions.get('window').width
     const ITEM_WIDTH = Dimensions.get('window').width * 0.90
+    const [projectDetailState, setProjectDetailState] = useState(false)
+    const [taskDetailState, setTaskDetailState] = useState(false)
+    const [projectData, setProjectData] = useState(undefined)
+    const [taskData, setTaskData] = useState(undefined)
 
     // Fetch Todays Date
     let DayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -37,48 +42,74 @@ const HomeScreen = () => {
     const ProjectData = [{
         id: Math.random(),
         Name: "Project 1"
-    },{
+    }, {
         id: Math.random(),
         Name: "Project 2"
-    },{
+    }, {
         id: Math.random(),
         Name: "Project 3"
-    },{
+    }, {
         id: Math.random(),
         Name: "Project 4"
-    },
-]
+    }]
+
+    const ProjectToggleHandler = () => {
+        setProjectDetailState(!projectDetailState)
+    }
+
+    const TaskToggleHandler = () => {
+        setTaskDetailState(!taskDetailState)
+    }
+
+    const ProjectClickHandler = data => {
+        console.log(data)
+        setProjectData(data)
+        ProjectToggleHandler();
+    }
+
+    const TaskClickHandler = data => {
+        console.log(data);
+        setTaskData(data);
+        TaskToggleHandler();
+    }
+    
+    const ProjectItem = data => {
+        return <ProjectItemCard ProjectClickHandler={ProjectClickHandler} data={data} />
+    }
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={{width: '100%'}}>
-                <View>
-                    <Text style={styles.dateText}>{DateString}</Text>
-                </View>
-                <View style={styles.ProjectContainer}>
-                    <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Projects</Text>
-                    {/* <Carousel
+        <>
+            <ProjectDetailScreen ProjectToggleHandler={ProjectToggleHandler} data={projectData} isVisible={projectDetailState} />
+            <TaskDetailScreen TaskToggleHandler={TaskToggleHandler} data={taskData} isVisible={taskDetailState} />
+            <View style={styles.container}>
+                <ScrollView style={{ width: '100%' }}>
+                    <View>
+                        <Text style={styles.dateText}>{DateString}</Text>
+                    </View>
+                    <View style={styles.ProjectContainer}>
+                        <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Projects</Text>
+                        <Carousel
                             layout="default"
-                            ref={isCarousel}
                             data={ProjectData}
-                            renderItem={ProjectItemCard}
+                            renderItem={ProjectItem}
                             sliderWidth={SLIDER_WIDTH}
                             itemWidth={ITEM_WIDTH}
                             inactiveSlideShift={0}
                             useScrollView={true}
-                        /> */}
-                    <ProjectItemCard item={{Name: "Project Name"}} />
-                </View>
-                <View style={styles.taskContainer}>
-                    <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Task</Text>
-                    <ScrollView style={{ height: '100%' }}>
-                        <View style={{ width: '90%', marginLeft: '5%' }}>
-                            {TaskData.map((data) => <TaskItemCard key={data.id} data={data} />)}
-                        </View>
-                    </ScrollView>
-                </View>
-            </ScrollView>
-        </View>
+                        />
+                        {/* <ProjectItemCard item={{Name: "Project Name"}} /> */}
+                    </View>
+                    <View style={styles.taskContainer}>
+                        <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Task</Text>
+                        <ScrollView style={{ height: '100%' }}>
+                            <View style={{ width: '90%', marginLeft: '5%' }}>
+                                {TaskData.map((data) => <TaskItemCard TaskClickHandler={TaskClickHandler} key={data.id} data={data} />)}
+                            </View>
+                        </ScrollView>
+                    </View>
+                </ScrollView>
+            </View>
+        </>
     )
 }
 

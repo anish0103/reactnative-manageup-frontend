@@ -1,8 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Dimensions } from "react-native";
-import Header from "../Components/Header";
+import Modal from "react-native-modal";
 
-const ChatScreen = () => {
+import ModalHeader from "../Components/ModalHeader";
+
+const ChatScreen = props => {
 
     const ChatData = [{
         Name: "Satyam Raval",
@@ -30,18 +32,19 @@ const ChatScreen = () => {
         userid: "4",
         Message: "Okayy!! Good 👍"
     },
-    ]
+]
 
     return (
-        <>
-            <Header title={"Project Name"} />
-            <TouchableWithoutFeedback onPress={()=> Keyboard.dismiss()}>
+        <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }} onRequestClose={() => props.ToggleHandler()} isVisible={props.isVisible}>
+            {/* <Text style={styles.headerTitle}>{props.data.Name}</Text> */}
+            <ModalHeader title={props.data.Name} />
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                 <View style={styles.container}>
-                    <ScrollView style={{ height: '60%', paddingTop: 20 }}>
+                    <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingTop: 5 }}>
                         {ChatData.map((data) => {
                             if (data.userid !== "1") {
                                 return (
-                                    <View style={styles.chatItemLeft}>
+                                    <View key={data.id} style={styles.chatItemLeft}>
                                         <View style={styles.chatTextLeft}>
                                             <Text style={{ marginBottom: 3, color: "#646464" }}>{data.Name}</Text>
                                             <Text style={styles.leftText}>{data.Message}</Text>
@@ -67,7 +70,7 @@ const ChatScreen = () => {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-        </>
+        </Modal>
     )
 }
 
@@ -75,6 +78,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
+        backgroundColor: "white"
     },
     inputContainer: {
         flexDirection: "row",
@@ -105,13 +109,13 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 12,
         flexDirection: "row",
-        justifyContent: "flex-start"
+        justifyContent: "flex-start",
     },
     chatItemRight: {
         width: '100%',
         paddingHorizontal: 12,
         flexDirection: "row",
-        justifyContent: "flex-end"
+        justifyContent: "flex-end",
     },
     chatTextLeft: {
         paddingVertical: 15,
@@ -137,8 +141,13 @@ const styles = StyleSheet.create({
     rightText: {
         fontSize: Dimensions.get('window').scale < 2 ? 17 : 16,
         color: "white"
-
-    }
+    },
+    headerTitle: {
+        fontSize: Dimensions.get('window').scale < 2 ? 26 : 23,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginVertical: 10
+    },
 
 });
 

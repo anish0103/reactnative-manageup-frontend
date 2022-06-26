@@ -1,9 +1,15 @@
-import {React, useState, useEffect} from "react";
+import { React, useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, Animated } from "react-native";
 
-const SignInScreen = () => {
+import SignUpScreen from "./SignUpScreen";
+import AlertComponent from "../Components/AlertComponent";
+
+const SignInScreen = props => {
     const [email, setEmail] = useState(undefined)
     const [password, setPassword] = useState(undefined)
+    const [signUpMode, setSignUpMode] = useState(false)
+
+    const emailValid = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
 
     const translation = new Animated.Value(100);
     const opacity = new Animated.Value(0);
@@ -23,62 +29,70 @@ const SignInScreen = () => {
         ]).start();
     }, [])
 
-    const RevertAnimation = () => {
-        Animated.parallel([
-            Animated.timing(opacity, {
-                toValue: 0,
-                useNativeDriver: true,
-                duration: 1000
-            }),
-            Animated.timing(translation, {
-                toValue: -100,
-                useNativeDriver: true,
-                duration: 1000
-            })
-        ]).start();
+    const MoveHandler = () => {
+        props.storeData("Home");
     }
 
-    const ButtonHandler = () => {
-        const FormData = {Email: email, Password: password}
-        console.log(FormData);
-        setPassword(undefined)
-        setEmail(undefined)
-        RevertAnimation()
+    const SignInButtonHandler = () => {
+        if (email === undefined || password === undefined || email.trim().length === 0 || password.trim().length === 0 || !email.match(emailValid) || password.trim().length < 5) {
+            return AlertComponent("Warning", "Please enter valid data!!");
+        } else {
+            // Perform the sign In Logic
+            const Data = { Email: email, Password: password }
+            console.log("Login " + Data);
+            Keyboard.dismiss();
+            setPassword(undefined)
+            setEmail(undefined)
+            MoveHandler()
+        }
+    }
+
+    const SignUpButtonHandler = (data) => {
+        console.log("SignUp " + data);
+        MoveHandler()
     }
 
     const keyboardHandler = () => {
         Keyboard.dismiss();
     }
 
+    // console.log(signUpMode)
+    const ToggleHandler = () => {
+        setSignUpMode(!signUpMode)
+    }
+
     return (
-        <TouchableWithoutFeedback onPress={keyboardHandler}>
-            <Animated.View style={[styles.container, { transform: [{ translateY: translation }], opacity: opacity }]}>
-                <View style={styles.createAccountTextContainer}>
-                    <Text style={styles.createAccountText}>Create a Account</Text>
-                </View>
-                <View style={styles.imageContainer}>
-                    <Image style={styles.image} source={require('../assets/signin.jpg')} />
-                </View>
-                <View style={styles.loginTextContainer}>
-                    <Text style={styles.loginText}>Log In</Text>
-                </View>
-                <View>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLable}>YOUR EMAIL</Text>
-                        <TextInput keyboardType="email-address" value={email} onChangeText={(data)=> setEmail(data)} style={styles.inputText} />
+        <>
+            <SignUpScreen SignUpButtonHandler={SignUpButtonHandler} ToggleHandler={ToggleHandler} isVisible={signUpMode} />
+            <TouchableWithoutFeedback onPress={keyboardHandler}>
+                <Animated.View style={[styles.container, { transform: [{ translateY: translation }], opacity: opacity }]}>
+                    <View style={styles.createAccountTextContainer}>
+                        <Text onPress={ToggleHandler} style={styles.createAccountText}>Create a Account</Text>
                     </View>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLable}>YOUR PASSWORD</Text>
-                        <TextInput secureTextEntry={true} value={password} onChangeText={(data)=> setPassword(data)} style={styles.inputText} />
+                    <View style={styles.imageContainer}>
+                        <Image style={styles.image} source={require('../assets/signin.jpg')} />
                     </View>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity activeOpacity={0.6} onPress={ButtonHandler} style={styles.signInButton}>
-                        <Text style={styles.signInText}>Continue</Text>
-                    </TouchableOpacity>
-                </View>
-            </Animated.View>
-        </TouchableWithoutFeedback>
+                    <View style={styles.loginTextContainer}>
+                        <Text style={styles.loginText}>Log In</Text>
+                    </View>
+                    <View>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.inputLable}>YOUR EMAIL</Text>
+                            <TextInput keyboardType="email-address" value={email} onChangeText={(data) => setEmail(data)} style={styles.inputText} />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.inputLable}>YOUR PASSWORD</Text>
+                            <TextInput secureTextEntry={true} value={password} onChangeText={(data) => setPassword(data)} style={styles.inputText} />
+                        </View>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity activeOpacity={0.6} onPress={SignInButtonHandler} style={styles.signInButton}>
+                            <Text style={styles.signInText}>Continue</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Animated.View>
+            </TouchableWithoutFeedback>
+        </>
     )
 }
 
@@ -90,7 +104,7 @@ const styles = StyleSheet.create({
     },
     createAccountTextContainer: {
         position: "absolute",
-        top: '5%',
+        top: '6%',
         width: '100%',
     },
     createAccountText: {

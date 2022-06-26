@@ -1,29 +1,55 @@
+import { React, useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native'
+import { View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import NavigationBar from './Components/NavigationBar';
 import IntroScreen from './Screens/IntroScreen';
 import AppStartScreen from './Screens/AppStartScreen';
 import SignInScreen from './Screens/SignInScreen';
-import SignUpScreen from './Screens/SignUpScreen';
-import CreateProjectScreen from './Screens/CreateProjectScreen';
-import CreateTaskScreen from './Screens/CreateTaskScreen';
-import ChatScreen from './Screens/ChatScreen';
-import TaskDetailScreen from './Screens/TaskDetailScreen'
-import ProjectDetailScreen from './Screens/ProjectDetailScreen';
 
 export default function App() {
+  const [userStatus, setUserStatus] = useState(null)
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('user-status', value)
+      setUserStatus(value);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('user-status')
+      if (value === null) {
+        storeData("Intro")
+      } else {
+        storeData(value);
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // AsyncStorage.removeItem('user-status');
+
+  useEffect(() => {
+    getData();
+  }, [])
+
   return (
-    <NavigationContainer>
-      <NavigationBar />
-    </NavigationContainer>
-    // <IntroScreen />
-    // <AppStartScreen />
-    // <SignInScreen />
-    // <SignUpScreen />
-    // <CreateProjectScreen />
-    // <CreateTaskScreen />
-    // <ChatScreen />
-    // <TaskDetailScreen />
-    // <ProjectDetailScreen />
-  );
+    <View style={{ width: '100%', flex: 1 }}>
+      {
+        userStatus === "Intro" ? <IntroScreen storeData={storeData} />
+          : userStatus === "Start" ? <AppStartScreen storeData={storeData} />
+            : userStatus === "Auth" ? <SignInScreen storeData={storeData} />
+              : userStatus === "Home" ? <NavigationContainer>
+                <NavigationBar />
+              </NavigationContainer>
+                : <View></View>
+      }
+    </View>
+  )
 }

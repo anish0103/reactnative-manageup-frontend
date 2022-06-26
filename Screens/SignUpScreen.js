@@ -1,89 +1,73 @@
-import { React, useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, Animated } from "react-native";
+import { React, useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
+import Modal from "react-native-modal";
 
-const SignUpScreen = () => {
+import AlertComponent from "../Components/AlertComponent";
+
+const SignUpScreen = props => {
 
     const [email, setEmail] = useState(undefined)
     const [password, setPassword] = useState(undefined)
     const [name, setName] = useState(undefined)
-    const translation = new Animated.Value(100);
-    const opacity = new Animated.Value(0);
 
-    useEffect(() => {
-        Animated.parallel([
-            Animated.timing(opacity, {
-                toValue: 1,
-                useNativeDriver: true,
-                duration: 1000
-            }),
-            Animated.timing(translation, {
-                toValue: 0,
-                useNativeDriver: true,
-                duration: 1000
-            })
-        ]).start();
-    }, [])
-
-    const RevertAnimation = () => {
-        Animated.parallel([
-            Animated.timing(opacity, {
-                toValue: 0,
-                useNativeDriver: true,
-                duration: 1000
-            }),
-            Animated.timing(translation, {
-                toValue: -100,
-                useNativeDriver: true,
-                duration: 1000
-            })
-        ]).start();
-    }
+    const emailValid = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
+    const nameValid = "^[a-zA-Z.,?\\s]*$";
 
     const ButtonHandler = () => {
-        const FormData = { Name: name, Email: email, Password: password }
-        console.log(FormData);
-        setName(undefined)
-        setEmail(undefined)
-        setPassword(undefined)
-        RevertAnimation()
+        const Data = { Name: name, Email: email, Password: password }
+        if (name === undefined || email === undefined || password === undefined || name.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0 || !email.match(emailValid) || !name.match(nameValid) || password.trim().length < 5) {
+            return AlertComponent("Warning", "Please enter valid data!!")
+        } else {
+            // Perform the sign In Logic
+            props.SignUpButtonHandler(Data);
+            setName(undefined)
+            setEmail(undefined)
+            setPassword(undefined)
+        }
     }
 
     const keyboardHandler = () => {
         Keyboard.dismiss();
     }
 
+    const ToggleHandler = () => {
+        props.ToggleHandler();
+    }
+
     return (
         <TouchableWithoutFeedback onPress={keyboardHandler}>
-            <Animated.View style={[styles.container, { transform: [{ translateY: translation }], opacity: opacity }]}>
-                <View style={styles.haveAccountTextContainer}>
-                    <Text style={styles.haveAccountText}>Have Account?Log In</Text>
-                </View>
-                <View style={styles.imageContainer}>
-                    <Image style={styles.image} source={require('../assets/signup.jpg')} />
-                </View>
-                <View style={styles.signUpTextContainer}>
-                    <Text style={styles.signUpText}>Sign Up</Text>
-                </View>
-                <View>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLable}>YOUR NAME</Text>
-                        <TextInput value={name} onChangeText={(data) => setName(data)} style={styles.inputText} />
+            <Modal backdropColor="white" style={{ margin: 0 }} onRequestClose={() => props.ToggleHandler()} isVisible={props.isVisible}>
+                <View style={styles.container}>
+                    <View style={styles.haveAccountTextContainer}>
+                        <Text onPress={ToggleHandler} style={styles.haveAccountText}>Have Account?Log In</Text>
                     </View>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLable}>YOUR EMAIL</Text>
-                        <TextInput keyboardType="email-address" value={email} onChangeText={(data) => setEmail(data)} style={styles.inputText} />
+                    <View style={styles.imageContainer}>
+                        <Image style={styles.image} source={require('../assets/signup.jpg')} />
                     </View>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLable}>YOUR PASSWORD</Text>
-                        <TextInput secureTextEntry={true} value={password} onChangeText={(data) => setPassword(data)} style={styles.inputText} />
+                    <View style={styles.signUpTextContainer}>
+                        <Text style={styles.signUpText}>Sign Up</Text>
+                    </View>
+                    <View>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.inputLable}>YOUR NAME</Text>
+                            <TextInput value={name} onChangeText={(data) => setName(data)} style={styles.inputText} />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.inputLable}>YOUR EMAIL</Text>
+                            <TextInput keyboardType="email-address" value={email} onChangeText={(data) => setEmail(data)} style={styles.inputText} />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.inputLable}>YOUR PASSWORD</Text>
+                            <TextInput secureTextEntry={true} value={password} onChangeText={(data) => setPassword(data)} style={styles.inputText} />
+                        </View>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity activeOpacity={0.6} onPress={ButtonHandler} style={styles.signInButton}>
+                            <Text style={styles.signInText}>Continue</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity activeOpacity={0.6} onPress={ButtonHandler} style={styles.signInButton}>
-                        <Text style={styles.signInText}>Continue</Text>
-                    </TouchableOpacity>
-                </View>
-            </Animated.View>
+            </Modal>
         </TouchableWithoutFeedback>
     )
 }
@@ -92,11 +76,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        justifyContent: "center"
+        justifyContent: "center",
+        backgroundColor: "white"
     },
     haveAccountTextContainer: {
         position: "absolute",
-        top: '5%',
+        top: '4%',
         width: '100%',
     },
     haveAccountText: {

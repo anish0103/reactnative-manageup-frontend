@@ -1,10 +1,18 @@
-import { View, StyleSheet, Text, Image, Dimensions } from "react-native";
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const TaskItemCard = props => {
+    
+    const ClickHandler = () => {
+        if(props.TaskClickHandler === undefined) {
+            return
+        }
+        props.TaskClickHandler(props.data)
+    }
+
     return (
-        <View style={styles.container}>
+        <TouchableOpacity onPress={ClickHandler} activeOpacity={0.6} style={styles.container}>
             <View style={{ flex: 1 }}>
                 <Text style={styles.taskName}>{props.data.Name}</Text>
             </View>
@@ -13,7 +21,7 @@ const TaskItemCard = props => {
                     <Text style={styles.pendingText}>Pending</Text></> : <><MaterialIcons name="done" size={20} color="#5bd28c" />
                     <Text style={styles.completeText}>Completed</Text></>}
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 

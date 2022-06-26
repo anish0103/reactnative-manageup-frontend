@@ -1,12 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
-// import Carousel from 'react-native-snap-carousel'
+import Carousel from 'react-native-snap-carousel'
+import Modal from "react-native-modal";
 
-import Header from "../Components/Header";
+import ModalHeader from "../Components/ModalHeader";
 import TeamMemberCard from "../Components/TeamMemberCard";
 import TaskItemCard from "../Components/TaskItemCard";
 
-const ProjectDetailScreen = () => {
+const ProjectDetailScreen = props => {
     const isCarousel = React.useRef(null)
     const SLIDER_WIDTH = Dimensions.get('window').width
     const ITEM_WIDTH = Dimensions.get('window').width * 0.90
@@ -46,12 +47,12 @@ const ProjectDetailScreen = () => {
     ]
 
     return (
-        <>
-            <Header title={"Project Details"} />
+        <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }} isVisible={props.isVisible} onRequestClose={() => props.ProjectToggleHandler()} >
+            <ModalHeader title={"Project Details"} />
             <ScrollView style={{ width: '100%' }}>
                 <View style={styles.container}>
                     <View style={styles.detailContainer}>
-                        <Text style={styles.headingText}>Project Name</Text>
+                        <Text style={styles.headingText}>{props?.data?.Name}</Text>
                     </View>
                     <View style={styles.detailContainer}>
                         <Text style={styles.headingText}>Description</Text>
@@ -59,7 +60,7 @@ const ProjectDetailScreen = () => {
                     </View>
                     <View style={styles.TeamMemberContainer}>
                         <Text style={[styles.headingText, { marginLeft: '5%' }]}>Team Members</Text>
-                        {/* <Carousel
+                        <Carousel
                             layout="default"
                             ref={isCarousel}
                             data={data}
@@ -68,19 +69,19 @@ const ProjectDetailScreen = () => {
                             itemWidth={ITEM_WIDTH}
                             inactiveSlideShift={0}
                             useScrollView={true}
-                        /> */}
+                        />
                     </View>
                 </View>
                 <View style={styles.taskContainer}>
                     <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Task</Text>
                     <ScrollView style={{ height: '100%' }}>
                         <View style={{ width: '90%', marginLeft: '5%' }}>
-                            {TaskData.map((data) => <TaskItemCard key={data.id} data={data} />)}
+                            {TaskData.map((data) => <TaskItemCard  key={data.id} data={data} />)}
                         </View>
                     </ScrollView>
                 </View>
             </ScrollView>
-        </>
+        </Modal>
     )
 }
 
@@ -89,11 +90,12 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 10,
         width: '100%',
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "white"
     },
     taskContainer: {
         width: '100%',
-        height: 280
+        height: Dimensions.get("window").height > 800 ? 370 : 280
     },
     button: {
         marginVertical: 15,

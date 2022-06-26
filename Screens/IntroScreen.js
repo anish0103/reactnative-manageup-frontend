@@ -2,7 +2,7 @@ import { React, useEffect } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Animated } from "react-native";
 
 
-const IntroScreen = () => {
+const IntroScreen = props => {
     const translation = new Animated.Value(100);
     const opacity = new Animated.Value(0);
 
@@ -36,9 +36,13 @@ const IntroScreen = () => {
         ]).start();
     }
 
+    const MoveHandler = () => {
+        props.storeData("Start");
+    }
+
     const ButtonHandler = () => {
         RevertAnimation();
-        console.log("Button is Clicked!!");
+        setTimeout(MoveHandler, 1000);
     }
 
     return (

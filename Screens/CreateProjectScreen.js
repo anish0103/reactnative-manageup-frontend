@@ -2,14 +2,17 @@ import { React, useState } from "react";
 import { View, Text, StyleSheet, Keyboard, Dimensions, TextInput, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import DatePicker from 'react-native-neat-date-picker';
 // import RNMultiSelect from "@freakycoder/react-native-multiple-select";
+import Modal from "react-native-modal";
 
-import Header from "../Components/Header";
+import ModalHeader from "../Components/ModalHeader";
+import AlertComponent from "../Components/AlertComponent";
 
-const CreateProjectScreen = () => {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndtDate] = useState("");
+const CreateProjectScreen = props => {
+    const [name, setName] = useState(undefined);
+    const [description, setDescription] = useState(undefined);
+    const [startDate, setStartDate] = useState(undefined);
+    const [endDate, setEndtDate] = useState(undefined);
+    const [selectedContact, setSelectedContact] = useState([]);
     const [showDatePicker, setShowDatePicker] = useState(false)
 
     const openDatePicker = () => {
@@ -31,13 +34,19 @@ const CreateProjectScreen = () => {
             Name: name,
             Description: description,
             StartDate: startDate,
-            EndDate: endDate
+            EndDate: endDate,
+            SelectedContact: selectedContact
         }
-        console.log(ProjectDetails)
-        setName("")
-        setEndtDate("")
-        setStartDate("")
-        setDescription("")
+        if (name === undefined || description === undefined || startDate === undefined || endDate === undefined || name.trim().length === 0 || description.trim().length === 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || selectedContact.length === 0) {
+            return AlertComponent("Warning", "Please enter some valid data!!");
+        } else {
+            props.AddProjectDataHandler(ProjectDetails)
+            setName(undefined)
+            setEndtDate(undefined)
+            setStartDate(undefined)
+            setDescription(undefined)
+            setSelectedContact([])
+        }
     }
 
     const staticData = [
@@ -64,19 +73,19 @@ const CreateProjectScreen = () => {
     ];
 
     return (
-        <>
-            <Header title={"Create Project"} />
+        <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }} onRequestClose={() => props.ProjectToggleHandler()} isVisible={props.isVisible}>
+            <ModalHeader title={"Create Project"} />
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                 <View style={styles.createProjectMainContainer}>
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputName}>Project Name</Text>
                         <TextInput multiline={true}
-                            numberOfLines={1} value={name} onChangeText={(data)=> setName(data)} style={styles.input} placeholder="Name" />
+                            numberOfLines={1} value={name} onChangeText={(data) => setName(data)} style={styles.input} placeholder="Name" />
                     </View>
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputName}>Add Description</Text>
                         <TextInput multiline={true}
-                            numberOfLines={5} value={description} onChangeText={(data)=> setDescription(data)} style={styles.input} placeholder="Description" />
+                            numberOfLines={5} value={description} onChangeText={(data) => setDescription(data)} style={styles.input} placeholder="Description" />
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity activeOpacity={0.6} onPress={openDatePicker} style={styles.button}>
@@ -95,7 +104,7 @@ const CreateProjectScreen = () => {
                             disableAbsolute={true}
                             data={staticData}
                             placeholder="Search/Select your contact"
-                            onSelect={(selectedItems) => console.log("SelectedItems: ", selectedItems)}
+                            onSelect={(selectedItems) => setSelectedContact(selectedItems)}
                         /> */}
                     </View>
                     <View style={styles.buttonContainer}>
@@ -105,18 +114,16 @@ const CreateProjectScreen = () => {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-        </>
+        </Modal>
     )
 }
 
 const styles = StyleSheet.create({
     createProjectMainContainer: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: '12%',
+        flex: 1,
         width: '100%',
         alignItems: "center",
+        backgroundColor: "white"
     },
     inputContainer: {
         width: '90%',
