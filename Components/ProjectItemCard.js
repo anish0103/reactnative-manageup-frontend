@@ -2,6 +2,8 @@ import { View, StyleSheet, Text, TouchableOpacity, Dimensions, Image } from "rea
 
 const ProjectItemCard = props => {
 
+    // console.log(props.data.item)
+
     const ClickHandler = () => {
         props.ProjectClickHandler(props.data.item)
     }

@@ -17,7 +17,7 @@ const TaskDetailScreen = props => {
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.headingText}>Description</Text>
-                    <Text numberOfLines={8} style={styles.descriptionText}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.</Text>
+                    <Text numberOfLines={8} style={styles.descriptionText}>{props?.data?.Description}</Text>
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.headingText}>Status</Text>

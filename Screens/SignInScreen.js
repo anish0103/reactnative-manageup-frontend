@@ -1,18 +1,22 @@
 import { React, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, Keyboard, Animated } from "react-native";
 
 import SignUpScreen from "./SignUpScreen";
 import AlertComponent from "../Components/AlertComponent";
+import { createUser, loginUser } from "../Store/Actions/UserActions";
 
 const SignInScreen = props => {
-    const [email, setEmail] = useState(undefined)
-    const [password, setPassword] = useState(undefined)
-    const [signUpMode, setSignUpMode] = useState(false)
+    const [email, setEmail] = useState(undefined);
+    const [password, setPassword] = useState(undefined);
+    const [signUpMode, setSignUpMode] = useState(false);
 
     const emailValid = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
 
     const translation = new Animated.Value(100);
     const opacity = new Animated.Value(0);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         Animated.parallel([
@@ -33,30 +37,45 @@ const SignInScreen = props => {
         props.storeData("Home");
     }
 
+    const SignUpFunction = async data => {
+        try {
+            await dispatch(createUser(data));
+            MoveHandler()
+        } catch (error) {
+            return AlertComponent("Error", error)
+        }
+    }
+
+    const SignInFunction = async data => {
+        try {
+            await dispatch(loginUser(data));
+            MoveHandler()
+            setPassword(undefined)
+            setEmail(undefined)
+        } catch (error) {
+            return AlertComponent("Error", error)
+        }
+    }
+
     const SignInButtonHandler = () => {
         if (email === undefined || password === undefined || email.trim().length === 0 || password.trim().length === 0 || !email.match(emailValid) || password.trim().length < 5) {
             return AlertComponent("Warning", "Please enter valid data!!");
         } else {
-            // Perform the sign In Logic
             const Data = { Email: email, Password: password }
-            console.log("Login " + Data);
             Keyboard.dismiss();
-            setPassword(undefined)
-            setEmail(undefined)
-            MoveHandler()
+            SignInFunction(Data);
+            // MoveHandler()
         }
     }
 
     const SignUpButtonHandler = (data) => {
-        console.log("SignUp " + data);
-        MoveHandler()
+        SignUpFunction(data)
     }
 
     const keyboardHandler = () => {
         Keyboard.dismiss();
     }
 
-    // console.log(signUpMode)
     const ToggleHandler = () => {
         setSignUpMode(!signUpMode)
     }

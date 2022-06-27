@@ -56,14 +56,14 @@ const ProjectDetailScreen = props => {
                     </View>
                     <View style={styles.detailContainer}>
                         <Text style={styles.headingText}>Description</Text>
-                        <Text numberOfLines={8} style={styles.descriptionText}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. like.</Text>
+                        <Text numberOfLines={8} style={styles.descriptionText}>{props?.data?.Description}</Text>
                     </View>
                     <View style={styles.TeamMemberContainer}>
                         <Text style={[styles.headingText, { marginLeft: '5%' }]}>Team Members</Text>
                         <Carousel
                             layout="default"
                             ref={isCarousel}
-                            data={data}
+                            data={props?.data?.Members}
                             renderItem={TeamMemberCard}
                             sliderWidth={SLIDER_WIDTH}
                             itemWidth={ITEM_WIDTH}
@@ -76,7 +76,7 @@ const ProjectDetailScreen = props => {
                     <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Task</Text>
                     <ScrollView style={{ height: '100%' }}>
                         <View style={{ width: '90%', marginLeft: '5%' }}>
-                            {TaskData.map((data) => <TaskItemCard  key={data.id} data={data} />)}
+                            {props?.data?.Task?.length === 0 ? <Text style={{ fontSize: Dimensions.get('window').scale < 2 ? 20 : 17, textAlign: "center", color: '#646464',}}>No task is there, Please add some</Text> : props?.data?.Task?.map((data) => <TaskItemCard  key={data.id} data={data} />)}
                         </View>
                     </ScrollView>
                 </View>
@@ -96,21 +96,6 @@ const styles = StyleSheet.create({
     taskContainer: {
         width: '100%',
         height: Dimensions.get("window").height > 800 ? 370 : 280
-    },
-    button: {
-        marginVertical: 15,
-        width: '90%',
-        justifyContent: "center",
-        borderRadius: 10,
-        alignItems: "center",
-        paddingVertical: 15,
-        paddingHorizontal: 10,
-        backgroundColor: '#246bfb'
-    },
-    buttonText: {
-        fontWeight: "500",
-        fontSize: Dimensions.get('window').scale < 2 ? 17 : 15,
-        color: "white"
     },
     headingText: {
         fontSize: Dimensions.get('window').scale < 2 ? 22 : 19,

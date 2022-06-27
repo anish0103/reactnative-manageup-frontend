@@ -20,9 +20,9 @@ const SignUpScreen = props => {
         } else {
             // Perform the sign In Logic
             props.SignUpButtonHandler(Data);
-            setName(undefined)
-            setEmail(undefined)
-            setPassword(undefined)
+            // setName(undefined)
+            // setEmail(undefined)
+            // setPassword(undefined)
         }
     }
 

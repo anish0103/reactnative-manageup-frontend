@@ -7,7 +7,7 @@ const TeamMemberCard = ({item}) => {
                 <Image style={styles.profileImage} source={require('../assets/avatar.png')} />
             </View>
             <View>
-                <Text style={styles.memberName}>{item.title}</Text>
+                <Text style={styles.memberName}>{item.Name}</Text>
             </View>
         </View>
     );
