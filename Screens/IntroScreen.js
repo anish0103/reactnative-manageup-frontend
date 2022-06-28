@@ -11,12 +11,12 @@ const IntroScreen = props => {
             Animated.timing(opacity, {
                 toValue: 1,
                 useNativeDriver: true,
-                duration: 1000
+                duration: 800
             }),
             Animated.timing(translation, {
                 toValue: 0,
                 useNativeDriver: true,
-                duration: 1000
+                duration: 800
             })
         ]).start();
     }, [])
@@ -26,12 +26,12 @@ const IntroScreen = props => {
             Animated.timing(opacity, {
                 toValue: 0,
                 useNativeDriver: true,
-                duration: 1000
+                duration: 800
             }),
             Animated.timing(translation, {
                 toValue: -100,
                 useNativeDriver: true,
-                duration: 1000
+                duration: 800
             })
         ]).start();
     }
@@ -42,7 +42,7 @@ const IntroScreen = props => {
 
     const ButtonHandler = () => {
         RevertAnimation();
-        setTimeout(MoveHandler, 1000);
+        setTimeout(MoveHandler, 800);
     }
 
     return (

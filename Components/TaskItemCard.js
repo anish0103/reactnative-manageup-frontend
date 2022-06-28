@@ -17,7 +17,7 @@ const TaskItemCard = props => {
                 <Text style={styles.taskName}>{props.data.Name}</Text>
             </View>
             <View style={styles.statusContainer}>
-                {props.data.Status === "pending" ? <><AntDesign name="clockcircleo" size={18} color="#f89117" />
+                {props.data.Status === "Pending" ? <><AntDesign name="clockcircleo" size={18} color="#f89117" />
                     <Text style={styles.pendingText}>Pending</Text></> : <><MaterialIcons name="done" size={20} color="#5bd28c" />
                     <Text style={styles.completeText}>Completed</Text></>}
             </View>

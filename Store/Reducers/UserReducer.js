@@ -1,4 +1,4 @@
-import { CREATEUSER, GETUSERS, LOGINUSER } from "../Actions/UserActions";
+import { CREATEUSER, GETUSERBYID, GETUSERS, LOGINUSER } from "../Actions/UserActions";
 
 const initialState = {
     userdata: [],
@@ -12,6 +12,8 @@ const UserReducer = (state = initialState, action) => {
         case CREATEUSER:
             return { ...state, userdata: action.data }
         case LOGINUSER: 
+            return {...state, userdata: action.data}
+        case GETUSERBYID:
             return {...state, userdata: action.data}
         default:
             return state;

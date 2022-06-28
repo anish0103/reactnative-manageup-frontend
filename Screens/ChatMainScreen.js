@@ -1,11 +1,13 @@
 import { React, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
 
 import ChatScreen from "./ChatScreen";
 
 const ChatMainScreen = () => {
     const [chatShow, setChatShow] = useState(false)
     const [chatData, setChatData] = useState(undefined)
+    const userprojects = useSelector(state => state.projects.userprojects)
 
     const ToggleHandler = () => {
         setChatShow(!chatShow)
@@ -17,63 +19,15 @@ const ChatMainScreen = () => {
     }
 
     if (chatShow) {
-        console.log("Chat is Rendering")
         return (
             <ChatScreen data={chatData} isVisible={chatShow} ToggleHandler={ToggleHandler} />
         )
     }
 
-    const Projects = [{
-        Name: "Web Dev",
-        id: 1,
-    }, {
-        Name: "React JS",
-        id: 2,
-    }, {
-        Name: "Angular",
-        id: 3,
-    }, {
-        Name: "Sql",
-        id: 4,
-    }, {
-        Name: "React Native",
-        id: 5,
-    }, {
-        Name: "Web Dev",
-        id: 6,
-    }, {
-        Name: "React JS",
-        id: 7,
-    }, {
-        Name: "Angular",
-        id: 8,
-    }, {
-        Name: "Sql",
-        id: 9,
-    }, {
-        Name: "React Native",
-        id: 51,
-    }, {
-        Name: "Web Dev",
-        id: 11,
-    }, {
-        Name: "React JS",
-        id: 21,
-    }, {
-        Name: "Angular",
-        id: 31,
-    }, {
-        Name: "Sql",
-        id: 42,
-    }, {
-        Name: "React Native",
-        id: 53,
-    },]
-
     return (
         <View style={styles.container}>
             <ScrollView style={{ width: '100%' }}>
-                {Projects.map((data) => (
+                {userprojects.length === 0 ? <View style={styles.container}><Text style={{ fontSize: Dimensions.get('window').scale < 2 ? 24 : 20, color: "#646464", fontWeight: "500", textAlign: "center" }}>No chat is available</Text></View> : userprojects.map((data) => (
                     <TouchableOpacity onPress={() => ClickHandler(data)} key={data.id} style={styles.chatList}>
                         <View style={styles.imageContainer}>
                             <Text style={styles.chatProfileName}>{data.Name.charAt(0)}</Text>

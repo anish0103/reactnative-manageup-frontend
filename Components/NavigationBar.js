@@ -10,7 +10,7 @@ import ProfileScreen from '../Screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
-const NavigationBar = () => {
+const NavigationBar = props => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -67,7 +67,7 @@ const NavigationBar = () => {
             )
           }
         }}
-        name="Profile" component={ProfileScreen} />
+        name="Profile" children={() => <ProfileScreen storeData={() => props.storeData("Start")} />} />
     </Tab.Navigator>
   );
 }

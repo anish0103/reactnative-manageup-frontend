@@ -34,8 +34,6 @@ export default function App() {
     }
   }
 
-  console.log(userStatus)
-
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('user-status')
@@ -68,7 +66,7 @@ export default function App() {
               : userStatus === "Auth" ?
                 <SignInScreen storeData={storeData} />
                 : userStatus === "Home" ?
-                  <NavigationContainer><NavigationBar /></NavigationContainer>
+                  <NavigationContainer><NavigationBar storeData={storeData} /></NavigationContainer>
                   : <View></View>
         }
       </View>

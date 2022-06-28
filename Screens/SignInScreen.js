@@ -23,12 +23,12 @@ const SignInScreen = props => {
             Animated.timing(opacity, {
                 toValue: 1,
                 useNativeDriver: true,
-                duration: 1000
+                duration: 800
             }),
             Animated.timing(translation, {
                 toValue: 0,
                 useNativeDriver: true,
-                duration: 1000
+                duration: 800
             })
         ]).start();
     }, [])

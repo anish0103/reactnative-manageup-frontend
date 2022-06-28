@@ -1,7 +1,8 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { View, Text, StyleSheet, Keyboard, Dimensions, TextInput, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
 import DatePicker from 'react-native-neat-date-picker';
-// import RNMultiSelect from "@freakycoder/react-native-multiple-select";
+import RNMultiSelect from "@freakycoder/react-native-multiple-select";
 import Modal from "react-native-modal";
 
 import ModalHeader from "../Components/ModalHeader";
@@ -14,6 +15,16 @@ const CreateProjectScreen = props => {
     const [endDate, setEndtDate] = useState(undefined);
     const [selectedContact, setSelectedContact] = useState([]);
     const [showDatePicker, setShowDatePicker] = useState(false)
+
+    const AllUsers = useSelector(state => state.users.alluserdata);
+    const userData = useSelector(state => state.users.userdata);
+    let ModifiedUsers = [];
+
+    if (AllUsers.length !== 0) {
+        AllUsers.forEach(element => {
+            ModifiedUsers.push({value: element.Name, _id: element._id, isChecked: false});
+        });
+    }
 
     const openDatePicker = () => {
         setShowDatePicker(true)
@@ -35,11 +46,12 @@ const CreateProjectScreen = props => {
             Description: description,
             StartDate: startDate,
             EndDate: endDate,
-            SelectedContact: selectedContact
+            Members: selectedContact
         }
         if (name === undefined || description === undefined || startDate === undefined || endDate === undefined || name.trim().length === 0 || description.trim().length === 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || selectedContact.length === 0) {
             return AlertComponent("Warning", "Please enter some valid data!!");
         } else {
+            ProjectDetails.Members.push({_id: userData._id, value: userData.Name});
             props.AddProjectDataHandler(ProjectDetails)
             setName(undefined)
             setEndtDate(undefined)
@@ -48,29 +60,6 @@ const CreateProjectScreen = props => {
             setSelectedContact([])
         }
     }
-
-    const staticData = [
-        {
-            id: 0,
-            value: "Anish Patel",
-            isChecked: false,
-        },
-        {
-            id: 1,
-            value: "Dhruv Patel",
-            isChecked: false,
-        },
-        {
-            id: 2,
-            value: "Rony Parmar",
-            isChecked: false,
-        },
-        {
-            id: 3,
-            value: "Satyam Raval Sir",
-            isChecked: false,
-        },
-    ];
 
     return (
         <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }} onRequestClose={() => props.ProjectToggleHandler()} isVisible={props.isVisible}>
@@ -99,13 +88,13 @@ const CreateProjectScreen = props => {
                         </TouchableOpacity>
                     </View>
                     <View>
-                        {/* <RNMultiSelect
+                        {AllUsers.length === 0 ? <Text>No user is there</Text> : <RNMultiSelect
                             width={'100%'}
                             disableAbsolute={true}
-                            data={staticData}
+                            data={ModifiedUsers}
                             placeholder="Search/Select your contact"
                             onSelect={(selectedItems) => setSelectedContact(selectedItems)}
-                        /> */}
+                        />}
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={buttonHandler}>

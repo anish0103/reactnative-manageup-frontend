@@ -2,13 +2,15 @@ import { React, useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import Carousel from 'react-native-snap-carousel'
 import { useSelector, useDispatch } from "react-redux";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import TaskItemCard from "../Components/TaskItemCard";
 import ProjectItemCard from "../Components/ProjectItemCard";
 import ProjectDetailScreen from "./ProjectDetailScreen";
 import TaskDetailScreen from "./TaskDetailScreen";
 import LoadingScreen from "./LoadingScreen";
-// import { getAllUsers } from "../Store/Actions/UserActions";
+import AlertComponent from "../Components/AlertComponent";
+import { getUserById, getAllUsers } from "../Store/Actions/UserActions";
 import { getAllProjects, getUserProject, getAllTask } from "../Store/Actions/ProjectActions";
 
 const HomeScreen = () => {
@@ -20,12 +22,12 @@ const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const userdata = useSelector(state => state.users.userdata)
-    // const projectdata = useSelector(state => state.projects.projectsdata)
     const userprojects = useSelector(state => state.projects.userprojects)
     const alltask = useSelector(state => state.projects.taskdata)
 
     const SLIDER_WIDTH = Dimensions.get('window').width
     const ITEM_WIDTH = Dimensions.get('window').width * 0.90
+    let value;
 
     let DayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     const MonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -33,16 +35,46 @@ const HomeScreen = () => {
     let DateString = DayNames[d.getDay()] + ", " + MonthNames[d.getMonth()] + " " + d.getDate()
 
     const DetailsFetchHandler = async () => {
-        setLoading(true)
-        await dispatch(getAllProjects());
-        await dispatch(getUserProject("asjdnjkv13546njfangjd"));
-        await dispatch(getAllTask());
-        // console.log(userdata);
-        setLoading(false);
+        try {
+            await dispatch(getAllProjects());
+            await dispatch(getAllUsers());
+            await dispatch(getUserById(value));
+            await dispatch(getUserProject(value));
+            await dispatch(getAllTask());
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            return AlertComponent("Error", error)
+        }
     }
-    
+
+    const storeData = async () => {
+        try {
+            await AsyncStorage.setItem('userid', userdata._id)
+            value = userdata._id;
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const getStoredData = async () => {
+        try {
+            value = await AsyncStorage.getItem('userid')
+            DetailsFetchHandler();
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     useEffect(() => {
-        DetailsFetchHandler();
+        if (userdata.length !== 0) {
+            setLoading(true)
+            storeData();
+            DetailsFetchHandler();
+        } else {
+            setLoading(true)
+            getStoredData();
+        }
     }, [])
 
     const ProjectToggleHandler = () => {

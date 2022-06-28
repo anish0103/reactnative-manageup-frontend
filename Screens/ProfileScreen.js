@@ -1,16 +1,18 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
+import { useSelector } from "react-redux";
 
-const ProfileScreen = () => {
+const ProfileScreen = props => {
+    const userdata = useSelector(state => state.users.userdata)
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
                 <Image style={styles.image} source={require('../assets/avatar.png')} />
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.nameText}>Anish Patel</Text>
-                <Text style={styles.emailText}>xyz@gmail.com</Text>
+                <Text style={styles.nameText}>{userdata?.Name}</Text>
+                <Text style={styles.emailText}>{userdata?.EmailId}</Text>
             </View>
             <View style={styles.ButtonContainer}>
                 <TouchableOpacity activeOpacity={0.6}>
@@ -35,7 +37,7 @@ const ProfileScreen = () => {
                 </View>
             </View>
             <View style={styles.ButtonContainer}>
-                <TouchableOpacity activeOpacity={0.6}>
+                <TouchableOpacity onPress={()=> props.storeData()}  activeOpacity={0.6}>
                     <Text style={styles.logOutText}>Log Out</Text>
                 </TouchableOpacity>
             </View>

@@ -12,40 +12,6 @@ const ProjectDetailScreen = props => {
     const SLIDER_WIDTH = Dimensions.get('window').width
     const ITEM_WIDTH = Dimensions.get('window').width * 0.90
 
-    const data = [
-        {
-            title: "Anish Patel",
-        },
-        {
-            title: "Dhruv Patel",
-        },
-        {
-            title: "Rony Parmar",
-        },
-        {
-            title: "Satyam Raval",
-        },
-    ];
-
-    const TaskData = [{
-        Name: "Improve",
-        id: Math.random(),
-        Status: "pending"
-    }, {
-        Name: "Maintain",
-        id: Math.random(),
-        Status: "completed"
-    }, {
-        Name: "Fix the bug",
-        id: Math.random(),
-        Status: "pending"
-    }, {
-        Name: "Authentication",
-        id: Math.random(),
-        Status: "completed"
-    },
-    ]
-
     return (
         <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }} isVisible={props.isVisible} onRequestClose={() => props.ProjectToggleHandler()} >
             <ModalHeader title={"Project Details"} />

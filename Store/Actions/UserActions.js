@@ -2,8 +2,9 @@ export const GETUSERS = "GETUSERS";
 export const SETUSERDETAIL = "SETUSERDETAIL";
 export const CREATEUSER = "CREATEUSER";
 export const LOGINUSER = "LOGINUSER";
+export const GETUSERBYID = "GETUSERBYID";
 
-const URL = "http://192.168.0.171:8080";
+const URL = "http://192.168.43.23:8080";
 
 export const getAllUsers = () => {
     return async dispatch => {
@@ -16,7 +17,7 @@ export const getAllUsers = () => {
                 data: data
             })
         } catch (error) {
-            console.log(error);
+            throw "Something went wrong!! Please check your internet connection or try again later."
         }
     }
 }
@@ -41,7 +42,7 @@ export const createUser = data => {
                 data: userdata
             })
         } catch (error) {
-            throw error
+            throw "Something went wrong!! Please check your internet connection or try again later."
         }
     }
 }
@@ -66,7 +67,26 @@ export const loginUser = data => {
                 data: userdata
             })
         } catch (error) {
-            throw error;
+            throw "Something went wrong!! Please check your internet connection or try again later."
+        }
+    }
+}
+
+export const getUserById = id => {
+    return async dispatch => {
+        try {
+            // Get the data of the user by passing the id of the user
+            const response = await fetch(URL + `/api/users/${id}`)
+            const userdata = await response.json();
+            if (!response.ok) {
+                throw userdata.message
+            }
+            dispatch({
+                type: GETUSERBYID,
+                data: userdata
+            })
+        } catch (error) {
+            throw "Something went wrong!! Please check your internet connection or try again later."
         }
     }
 }

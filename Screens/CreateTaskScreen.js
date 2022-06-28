@@ -1,8 +1,9 @@
 import { React, useState } from "react";
 import { View, Text, StyleSheet, Keyboard, Dimensions, TextInput, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import DatePicker from 'react-native-neat-date-picker';
-// import RNMultiSelect from "@freakycoder/react-native-multiple-select";
+import RNMultiSelect from "@freakycoder/react-native-multiple-select";
 import Modal from "react-native-modal";
+import { useSelector } from "react-redux";
 
 import ModalHeader from "../Components/ModalHeader";
 import AlertComponent from "../Components/AlertComponent";
@@ -15,6 +16,25 @@ const CreateTaskScreen = props => {
     const [endDate, setEndtDate] = useState(undefined);
     const [selectedContact, setSelectedContact] = useState([]);
     const [selectedProject, setSelectedProject] = useState([]);
+
+    const allUsers = useSelector(state => state.users.alluserdata);
+    const userData = useSelector(state => state.users.userdata);
+    const userProjects = useSelector(state => state.projects.userprojects)
+
+    let ModifiedUsers = [];
+    let ModifiedProjects = [];
+
+    if (allUsers.length !== 0) {
+        allUsers.forEach(element => {
+            ModifiedUsers.push({value: element.Name, _id: element._id, isChecked: false});
+        });
+    }
+
+    if (userProjects.length !== 0) {
+        userProjects.forEach(element => {
+            ModifiedProjects.push({value: element.Name, _id: element._id, isChecked: false});
+        });
+    }
 
     const openDatePicker = () => {
         setShowDatePicker(true)
@@ -36,12 +56,14 @@ const CreateTaskScreen = props => {
             Description: description,
             StartDate: startDate,
             EndDate: endDate,
-            SelectedContact: selectedContact,
-            SelectedProject: selectedProject
+            Status: "Pending",
+            Members: selectedContact,
+            Project: selectedProject
         }
         if (name === undefined || description === undefined || startDate === undefined || endDate === undefined || name.trim().length === 0 || description.trim().length === 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || selectedContact.length === 0 || selectedProject.length === 0) {
             return AlertComponent("Warning", "Please enter some valid data!!");
         } else {
+            TaskDetails.Members.push({_id: userData._id, value: userData.Name});
             props.AddTaskDataHandler(TaskDetails)
             setName(undefined)
             setEndtDate(undefined)
@@ -51,51 +73,6 @@ const CreateTaskScreen = props => {
             setSelectedProject([])
         }
     }
-
-    const staticData = [
-        {
-            id: 0,
-            value: "Anish Patel",
-            isChecked: false,
-        },
-        {
-            id: 1,
-            value: "Dhruv Patel",
-            isChecked: false,
-        },
-        {
-            id: 2,
-            value: "Rony Parmar",
-            isChecked: false,
-        },
-        {
-            id: 3,
-            value: "Satyam Raval Sir",
-            isChecked: false,
-        },
-    ];
-    const staticData2 = [
-        {
-            id: 0,
-            value: "Web Development",
-            isChecked: false,
-        },
-        {
-            id: 1,
-            value: ".net",
-            isChecked: false,
-        },
-        {
-            id: 2,
-            value: "html/css",
-            isChecked: false,
-        },
-        {
-            id: 3,
-            value: "React JS",
-            isChecked: false,
-        },
-    ];
 
     return (
         <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }} onRequestClose={() => props.TaskToggleHandler()} isVisible={props.isVisible}>
@@ -126,26 +103,27 @@ const CreateTaskScreen = props => {
                     <View style={styles.selectContainer}>
                         <View style={{ width: '50%', alignItems: "center" }}>
                             <Text style={styles.inputName}>Select Project</Text>
-                            {/* <RNMultiSelect
+                            {userProjects.length === 0 ? <Text style={[styles.noText]}>No Projects For You</Text> : <RNMultiSelect
                                 width={'88%'}
                                 disableAbsolute
-                                data={staticData2}
+                                data={ModifiedProjects}
                                 placeholder="Project"
                                 onSelect={(selectedItems) => setSelectedProject(selectedItems)}
-                            /> */}
+                            />}
                         </View>
                         <View style={{ width: '50%', alignItems: "center" }}>
                             <Text style={styles.inputName}>Select Members</Text>
-                            <View style={{ justifyContent: "center", height: 70 }}>
-                                <Text style={{ textAlign: "center", fontSize: Dimensions.get('window').scale < 2 ? 17 : 15, fontWeight: "500", color: "#646464" }}>First select the project</Text>
-                            </View>
-                            {/* <RNMultiSelect
-                                width={'88%'}
-                                disableAbsolute
-                                data={staticData}
-                                placeholder="People"
-                                onSelect={(selectedItems) => setSelectedContact(selectedItems)}
-                            /> */}
+                            {selectedProject.length === 0
+                                ? <View style={{ justifyContent: "center", height: 70 }}>
+                                    <Text style={{ textAlign: "center", fontSize: Dimensions.get('window').scale < 2 ? 17 : 15, fontWeight: "500", color: "#646464" }}>First select the project</Text>
+                                </View>
+                                : <RNMultiSelect
+                                    width={'88%'}
+                                    disableAbsolute
+                                    data={ModifiedUsers}
+                                    placeholder="People"
+                                    onSelect={(selectedItems) => setSelectedContact(selectedItems)}
+                                />}
                         </View>
                     </View>
                     <View style={styles.buttonContainer}>
@@ -204,8 +182,13 @@ const styles = StyleSheet.create({
     selectContainer: {
         width: '90%',
         flexDirection: "row"
-
-    }
+    },
+    noText: {
+        fontSize: Dimensions.get('window').scale < 2 ? 24 : 20,
+        color: "#646464",
+        fontWeight: "500",
+        textAlign: "center"
+    },
 });
 
 export default CreateTaskScreen;
