@@ -61,10 +61,9 @@ const SignInScreen = props => {
         if (email === undefined || password === undefined || email.trim().length === 0 || password.trim().length === 0 || !email.match(emailValid) || password.trim().length < 5) {
             return AlertComponent("Warning", "Please enter valid data!!");
         } else {
-            const Data = { Email: email, Password: password }
+            const Data = { Email: email.toLowerCase(), Password: password }
             Keyboard.dismiss();
             SignInFunction(Data);
-            // MoveHandler()
         }
     }
 

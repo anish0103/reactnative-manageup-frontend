@@ -11,7 +11,7 @@ import TaskDetailScreen from "./TaskDetailScreen";
 import LoadingScreen from "./LoadingScreen";
 import AlertComponent from "../Components/AlertComponent";
 import { getUserById, getAllUsers } from "../Store/Actions/UserActions";
-import { getAllProjects, getUserProject, getAllTask } from "../Store/Actions/ProjectActions";
+import { getAllProjects, getUserProject, getAllTask, updateTaskStatus } from "../Store/Actions/ProjectActions";
 
 const HomeScreen = () => {
     const [projectDetailState, setProjectDetailState] = useState(false)
@@ -95,6 +95,16 @@ const HomeScreen = () => {
         TaskToggleHandler();
     }
 
+    const TaskStatusChanger = async data => {
+        TaskToggleHandler()
+        setLoading(true)
+        await dispatch(updateTaskStatus(data.Project[0]._id, userdata._id, data))
+        await dispatch(getAllProjects());
+        await dispatch(getUserProject(userdata._id));
+        await dispatch(getAllTask());
+        setLoading(false)
+    }
+
     const ProjectItem = data => {
         return <ProjectItemCard ProjectClickHandler={ProjectClickHandler} data={data} />
     }
@@ -105,8 +115,8 @@ const HomeScreen = () => {
 
     return (
         <>
-            <ProjectDetailScreen ProjectToggleHandler={ProjectToggleHandler} data={projectData} isVisible={projectDetailState} />
-            <TaskDetailScreen TaskToggleHandler={TaskToggleHandler} data={taskData} isVisible={taskDetailState} />
+            <ProjectDetailScreen userid={userdata._id} ProjectToggleHandler={ProjectToggleHandler} data={projectData} isVisible={projectDetailState} />
+            <TaskDetailScreen userid={userdata._id} TaskStatusChanger={TaskStatusChanger} TaskToggleHandler={TaskToggleHandler} data={taskData} isVisible={taskDetailState} />
             <View style={styles.container}>
                 <ScrollView style={{ width: '100%' }}>
                     <View>
@@ -128,7 +138,7 @@ const HomeScreen = () => {
                         <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Task</Text>
                         <ScrollView style={{ height: '100%' }}>
                             <View style={{ width: '90%', marginLeft: '5%' }}>
-                                {alltask.length === 0 ? <Text style={[styles.dateText]}>No Task For You</Text> : alltask.map((data) => <TaskItemCard TaskClickHandler={TaskClickHandler} key={data.id} data={data} />)}
+                                {alltask.length === 0 ? <Text style={[styles.dateText]}>No Task For You</Text> : alltask.map((data) => <TaskItemCard userid={userdata._id} TaskClickHandler={TaskClickHandler} key={data.id} data={data} />)}
                             </View>
                         </ScrollView>
                     </View>

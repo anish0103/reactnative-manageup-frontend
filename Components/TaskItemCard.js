@@ -3,9 +3,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const TaskItemCard = props => {
-    
+
+    const UserStatus = props.data?.Members.filter(data => data._id === props.userid)
+
     const ClickHandler = () => {
-        if(props.TaskClickHandler === undefined) {
+        if (props.TaskClickHandler === undefined) {
             return
         }
         props.TaskClickHandler(props.data)
@@ -17,7 +19,7 @@ const TaskItemCard = props => {
                 <Text style={styles.taskName}>{props.data.Name}</Text>
             </View>
             <View style={styles.statusContainer}>
-                {props.data.Status === "Pending" ? <><AntDesign name="clockcircleo" size={18} color="#f89117" />
+                {UserStatus !== undefined && UserStatus[0].Status === "Pending" ? <><AntDesign name="clockcircleo" size={18} color="#f89117" />
                     <Text style={styles.pendingText}>Pending</Text></> : <><MaterialIcons name="done" size={20} color="#5bd28c" />
                     <Text style={styles.completeText}>Completed</Text></>}
             </View>

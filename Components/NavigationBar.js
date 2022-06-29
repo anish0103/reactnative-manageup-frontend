@@ -38,7 +38,8 @@ const NavigationBar = props => {
             return (
               <AntDesign color={focused ? "#246bfb" : "#646464"} name="home" size={28} />
             )
-          }
+          },
+          unmountOnBlur: true
         }}
         name="Home" component={HomeScreen} />
       <Tab.Screen

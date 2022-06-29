@@ -3,8 +3,9 @@ export const GETUSERPROJECT = "GETUSERPROJECT";
 export const GETALLTASK = "GETALLTASK";
 export const CREATEPROJECT = "CREATEPROJECT";
 export const CREATETASK = "CREATETASK";
+export const UPDATETASKSTATUS = "UPDATETASKSTATUS";
 
-const URL = "http://192.168.43.23:8080";
+const URL = "http://192.168.0.171:8080";
 
 export const getAllProjects = () => {
     return async dispatch => {
@@ -78,6 +79,32 @@ export const createTask = (id, data) => {
             dispatch({
                 type: CREATETASK,
                 data: data
+            })
+        } catch (error) {
+            throw "Something went wrong!! Please check your internet connection or try again later."
+        }
+    }
+}
+
+export const updateTaskStatus = (projectid, userid, data) => {
+    return async dispatch => {
+        try {
+            // Update task status in the backend
+            const response = await fetch(URL + `/api/projects/updatetaskstatus/${projectid}/${userid}`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            const projectdata = await response.json()
+            console.log(projectdata);
+            if (!response.ok) {
+                throw projectdata.message
+            }
+            dispatch({
+                type: UPDATETASKSTATUS,
+                data: projectdata
             })
         } catch (error) {
             throw "Something went wrong!! Please check your internet connection or try again later."

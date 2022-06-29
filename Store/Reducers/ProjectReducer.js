@@ -1,4 +1,4 @@
-import { CREATEPROJECT, CREATETASK, GETALLTASK, GETPROJECTS, GETUSERPROJECT } from "../Actions/ProjectActions";
+import { CREATEPROJECT, CREATETASK, GETALLTASK, GETPROJECTS, GETUSERPROJECT, UPDATETASKSTATUS } from "../Actions/ProjectActions";
 
 const initialState = {
     projectsdata: [],
@@ -25,10 +25,17 @@ const ProjectReducer = (state = initialState, action) => {
             return { ...state, taskdata: TaskData };
         case CREATEPROJECT:
             state.userprojects.push(action.data)
-            return {...state, userprojects: state.userprojects}
+            return { ...state, userprojects: state.userprojects }
         case CREATETASK:
             state.taskdata.push(action.data)
-            return {...state, taskdata: state.taskdata}
+            return { ...state, taskdata: state.taskdata }
+        case UPDATETASKSTATUS:
+            // state.userprojects.map(data => {
+            //     if (data._id === action.data._id) {
+            //         data = action.data;
+            //     }
+            // })
+            return { ...state };
         default:
             return state;
     }

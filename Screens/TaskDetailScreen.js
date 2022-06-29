@@ -9,11 +9,11 @@ import ModalHeader from "../Components/ModalHeader";
 const TaskDetailScreen = props => {
     const SLIDER_WIDTH = Dimensions.get('window').width
     const ITEM_WIDTH = Dimensions.get('window').width * 0.90
-    const status = props?.data?.Status;
+
+    const UserStatus = props.data?.Members.filter(data => data._id === props.userid)
 
     const StatusHandler = () => {
-        // Change the status of task in backend
-        console.log("changing the status")
+        props.TaskStatusChanger(props.data);
     }
 
     return (
@@ -40,11 +40,11 @@ const TaskDetailScreen = props => {
                     />
                 </View>
                 <View style={styles.detailContainer}>
-                    <Text style={styles.headingText}>Status</Text>
-                    {status === "Pending" ? <Text style={styles.pendingText}>PENDING...</Text> : <Text style={styles.completeText}>COMPLETED</Text>}
+                    <Text style={styles.headingText}>Your Status</Text>
+                    {UserStatus !== undefined && UserStatus[0].Status === "Pending" ? <Text style={styles.pendingText}>PENDING...</Text> : <Text style={styles.completeText}>COMPLETED</Text>}
                 </View>
                 <View style={styles.buttonContainer}>
-                    {status === "Pending" ? <TouchableOpacity onPress={StatusHandler} activeOpacity={0.6} style={styles.button}>
+                    {UserStatus !== undefined && UserStatus[0].Status === "Pending" ? <TouchableOpacity onPress={StatusHandler} activeOpacity={0.6} style={styles.button}>
                         <Text style={styles.buttonText}>Completed</Text>
                     </TouchableOpacity> : <TouchableOpacity disabled activeOpacity={0.6} style={styles.button}>
                         <Text style={[styles.buttonText, { opacity: 0.5 }]}>Completed</Text>

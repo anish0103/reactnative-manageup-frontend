@@ -39,7 +39,7 @@ const CreateScreen = () => {
         try {
             await dispatch(createTask(data.Project[0]._id, data));
             setLoading(false)
-            return AlertComponent("Message", "Project is created successfully")
+            return AlertComponent("Message", "Task is created successfully")
         } catch (error) {
             setLoading(false)
             return AlertComponent("Error", error)

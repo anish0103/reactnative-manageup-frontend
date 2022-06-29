@@ -42,7 +42,7 @@ const ProjectDetailScreen = props => {
                     <Text style={[styles.headingText, { marginLeft: '5%' }]}>All Task</Text>
                     <ScrollView style={{ height: '100%' }}>
                         <View style={{ width: '90%', marginLeft: '5%' }}>
-                            {props?.data?.Task?.length === 0 ? <Text style={{ fontSize: Dimensions.get('window').scale < 2 ? 20 : 17, textAlign: "center", color: '#646464',}}>No task is there, Please add some</Text> : props?.data?.Task?.map((data) => <TaskItemCard  key={data.id} data={data} />)}
+                            {props?.data?.Task?.length === 0 ? <Text style={{ fontSize: Dimensions.get('window').scale < 2 ? 20 : 17, textAlign: "center", color: '#646464',}}>No task is there, Please add some</Text> : props?.data?.Task?.map((data) => <TaskItemCard userid={props.userid} key={data.id} data={data} />)}
                         </View>
                     </ScrollView>
                 </View>

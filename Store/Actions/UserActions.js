@@ -4,7 +4,7 @@ export const CREATEUSER = "CREATEUSER";
 export const LOGINUSER = "LOGINUSER";
 export const GETUSERBYID = "GETUSERBYID";
 
-const URL = "http://192.168.43.23:8080";
+const URL = "http://192.168.0.171:8080";
 
 export const getAllUsers = () => {
     return async dispatch => {
