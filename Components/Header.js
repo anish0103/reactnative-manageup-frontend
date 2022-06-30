@@ -1,14 +1,18 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
-const Header = props => {
+const Header = (props) => {
     return (
-        <View style={styles.headerContainer}>
-            <Text style={styles.headerTitle}>{props.title}</Text>
-            <View style={styles.profileContainer}>
-                <Image style={styles.profileImage} source={require('../assets/avatar.png')} />
+        <>
+            <StatusBar style="dark" />
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerTitle}>{props.title}</Text>
+                <TouchableOpacity activeOpacity={1} onPress={() => props.navigation.navigate('Profile')} style={styles.profileContainer}>
+                    <Image style={styles.profileImage} source={require('../assets/avatar.png')} />
+                </TouchableOpacity>
             </View>
-        </View>
+        </>
     )
 }
 
@@ -30,7 +34,7 @@ const styles = StyleSheet.create({
         width: 35,
         right: 15,
         bottom: 10,
-        borderRadius: '50%',
+        borderRadius: 200,
     },
     profileImage: {
         width: '100%',

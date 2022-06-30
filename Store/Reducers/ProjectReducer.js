@@ -30,11 +30,6 @@ const ProjectReducer = (state = initialState, action) => {
             state.taskdata.push(action.data)
             return { ...state, taskdata: state.taskdata }
         case UPDATETASKSTATUS:
-            // state.userprojects.map(data => {
-            //     if (data._id === action.data._id) {
-            //         data = action.data;
-            //     }
-            // })
             return { ...state };
         default:
             return state;

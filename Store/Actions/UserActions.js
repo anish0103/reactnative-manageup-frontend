@@ -1,16 +1,16 @@
+import { Data } from "../../Components/Constant";
+
 export const GETUSERS = "GETUSERS";
 export const SETUSERDETAIL = "SETUSERDETAIL";
 export const CREATEUSER = "CREATEUSER";
 export const LOGINUSER = "LOGINUSER";
 export const GETUSERBYID = "GETUSERBYID";
 
-const URL = "http://192.168.0.171:8080";
-
 export const getAllUsers = () => {
     return async dispatch => {
         try {
             // Fetch the Users From Backend
-            const response = await fetch(URL + "/api/users")
+            const response = await fetch(Data.URL + "/api/users")
             const data = await response.json();
             dispatch({
                 type: GETUSERS,
@@ -26,7 +26,7 @@ export const createUser = data => {
     return async dispatch => {
         try {
             // Send the Data To the backend
-            const response = await fetch(URL + '/api/users/signup/', {
+            const response = await fetch(Data.URL + '/api/users/signup/', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
@@ -51,7 +51,7 @@ export const loginUser = data => {
     return async dispatch => {
         try {
             // Check the user and perform login 
-            const response = await fetch(URL + '/api/users/login/', {
+            const response = await fetch(Data.URL + '/api/users/login/', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
@@ -76,7 +76,7 @@ export const getUserById = id => {
     return async dispatch => {
         try {
             // Get the data of the user by passing the id of the user
-            const response = await fetch(URL + `/api/users/${id}`)
+            const response = await fetch(Data.URL + `/api/users/${id}`)
             const userdata = await response.json();
             if (!response.ok) {
                 throw userdata.message

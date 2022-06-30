@@ -1,3 +1,5 @@
+import { Data } from "../../Components/Constant";
+
 export const GETPROJECTS = "GETPROJECTS";
 export const GETUSERPROJECT = "GETUSERPROJECT";
 export const GETALLTASK = "GETALLTASK";
@@ -5,13 +7,11 @@ export const CREATEPROJECT = "CREATEPROJECT";
 export const CREATETASK = "CREATETASK";
 export const UPDATETASKSTATUS = "UPDATETASKSTATUS";
 
-const URL = "http://192.168.0.171:8080";
-
 export const getAllProjects = () => {
     return async dispatch => {
         try {
             // Fetch the Users From Backend
-            const response = await fetch(URL + "/api/projects")
+            const response = await fetch(Data.URL + "/api/projects")
             const data = await response.json();
             dispatch({
                 type: GETPROJECTS,
@@ -40,7 +40,7 @@ export const createProject = data => {
     return async dispatch => {
         try {
             // Send New Project Data To the backend
-            const response = await fetch(URL + '/api/projects/createproject/', {
+            const response = await fetch(Data.URL + '/api/projects/createproject/', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
@@ -65,7 +65,7 @@ export const createTask = (id, data) => {
     return async dispatch => {
         try {
             // Send New Task Data To the backend
-            const response = await fetch(URL + `/api/projects/createtask/${id}`, {
+            const response = await fetch(Data.URL + `/api/projects/createtask/${id}`, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
@@ -90,7 +90,7 @@ export const updateTaskStatus = (projectid, userid, data) => {
     return async dispatch => {
         try {
             // Update task status in the backend
-            const response = await fetch(URL + `/api/projects/updatetaskstatus/${projectid}/${userid}`, {
+            const response = await fetch(Data.URL + `/api/projects/updatetaskstatus/${projectid}/${userid}`, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {

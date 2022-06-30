@@ -14,11 +14,11 @@ const ProfileScreen = props => {
                 <Text style={styles.nameText}>{userdata?.Name}</Text>
                 <Text style={styles.emailText}>{userdata?.EmailId}</Text>
             </View>
-            <View style={styles.ButtonContainer}>
+            {/* <View style={styles.ButtonContainer}>
                 <TouchableOpacity activeOpacity={0.6}>
                     <Text style={styles.editText}>Edit Profile</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
             <View style={styles.extraMainContainer}>
                 <View style={styles.extraContainer}>
                     <Text style={styles.extraHeadingText}>Extra</Text>

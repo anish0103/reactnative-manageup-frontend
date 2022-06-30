@@ -21,6 +21,8 @@ const CreateTaskScreen = props => {
     const userData = useSelector(state => state.users.userdata);
     const userProjects = useSelector(state => state.projects.userprojects)
 
+    console.log(selectedProject)
+
     let ModifiedUsers = [];
     let ModifiedProjects = [];
 
@@ -32,7 +34,7 @@ const CreateTaskScreen = props => {
 
     if (userProjects.length !== 0) {
         userProjects.forEach(element => {
-            ModifiedProjects.push({value: element.Name, _id: element._id, isChecked: false});
+            ModifiedProjects.push({value: element.Name, _id: element._id, isChecked: false, Members: element.Members});
         });
     }
 

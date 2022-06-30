@@ -1,52 +1,84 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Dimensions } from "react-native";
+import { React, useState, useEffect, useRef, useCallback } from "react";
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Dimensions } from "react-native";
 import Modal from "react-native-modal";
+import io from 'socket.io-client'
 
 import ModalHeader from "../Components/ModalHeader";
+import { Data } from '../Components/Constant'
+import AlertComponent from '../Components/AlertComponent';
+
+let socket;
+const backend = Data.URL;
 
 const ChatScreen = props => {
+    const scrollViewRef = useRef();
+    const [chatData, setChatData] = useState([])
+    const [messageText, setMessageText] = useState("")
 
-    const ChatData = [{
-        Name: "Satyam Raval",
-        id: Math.random(),
-        userid: "4",
-        Message: "Hello all, What's the update?"
-    }, {
-        Name: "Dhruv Patel",
-        id: Math.random(),
-        userid: "2",
-        Message: "I'm currently working on my layout and learning new things"
-    }, {
-        Name: "Anish Patel",
-        id: Math.random(),
-        userid: "1",
-        Message: "I'm currently designing my screens."
-    }, {
-        Name: "Rony Patel",
-        id: Math.random(),
-        userid: "3",
-        Message: "I'm currently learning the navigation and soon going to implement it"
-    }, {
-        Name: "Satyam Raval",
-        id: Math.random(),
-        userid: "4",
-        Message: "Okayy!! Good 👍"
-    },
-]
+    useEffect(() => {
+        socket = io(backend)
+    }, [])
+
+    const GetMessages = useCallback(
+        async () => {
+            fetch(backend + `/api/projects/getmessages/${props.data._id}`).then((response) => response.json()).then((data) => {
+                setChatData(data);
+            })
+        }, [])
+
+    const SendMessage = async (data) => {
+        const response = await fetch(backend + `/api/projects/sendmessage/${props.data._id}`, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const messagedata = await response.json()
+        setMessageText("")
+        setChatData(messagedata);
+        socket.emit('sendmessage', { data: data, roomid: props.data._id })
+    }
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('connect', () => {
+                socket.emit('join', props.data._id)
+            });
+            socket.on('resmessage', (data) => {
+                GetMessages()
+            })
+        }
+    }, [])
+
+    useEffect(() => {
+        setChatData(props.data.Chat)
+    }, [])
+
+    const SendMessageHandler = () => {
+        if(messageText.trim().length !==0) {
+            const Message = { value: props.userdata.Name, id: Math.random(), userid: props.userdata._id, Message: messageText }
+            SendMessage(Message)
+        } else {
+            return AlertComponent("Error", "Please enter some text in message box.")
+        } 
+    }
 
     return (
         <Modal backdropOpacity={1} animationIn="slideInRight" animationOut="slideOutRight" backdropColor="white" style={{ margin: 0 }} onRequestClose={() => props.ToggleHandler()} isVisible={props.isVisible}>
-            {/* <Text style={styles.headerTitle}>{props.data.Name}</Text> */}
             <ModalHeader title={props.data.Name} />
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                <View style={styles.container}>
-                    <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingTop: 5 }}>
-                        {ChatData.map((data) => {
-                            if (data.userid !== "1") {
+            <View style={styles.container}>
+                <ScrollView ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
+                    {chatData.length === 0
+                        ? <View>
+                            <Text style={styles.dateText}>No chats to show.</Text>
+                        </View>
+                        : chatData.map((data) => {
+                            if (data.userid !== props.userdata._id) {
                                 return (
                                     <View key={data.id} style={styles.chatItemLeft}>
                                         <View style={styles.chatTextLeft}>
-                                            <Text style={{ marginBottom: 3, color: "#646464" }}>{data.Name}</Text>
+                                            <Text style={{ marginBottom: 3, color: "#646464" }}>{data.value}</Text>
                                             <Text style={styles.leftText}>{data.Message}</Text>
                                         </View>
                                     </View>
@@ -61,15 +93,14 @@ const ChatScreen = props => {
                                 )
                             }
                         })}
-                    </ScrollView>
-                    <View style={styles.inputContainer}>
-                        <TextInput style={styles.inputText} placeholder="Message..." />
-                        <TouchableOpacity style={styles.sendButton}>
-                            <Text style={styles.sendText}>Send</Text>
-                        </TouchableOpacity>
-                    </View>
+                </ScrollView>
+                <View style={styles.inputContainer}>
+                    <TextInput autoFocus value={messageText} onChangeText={(data) => setMessageText(data)} style={styles.inputText} placeholder="Message..." />
+                    <TouchableOpacity onPress={SendMessageHandler} style={styles.sendButton}>
+                        <Text style={styles.sendText}>Send</Text>
+                    </TouchableOpacity>
                 </View>
-            </TouchableWithoutFeedback>
+            </View>
         </Modal>
     )
 }
@@ -82,9 +113,9 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         flexDirection: "row",
-        marginBottom: 12,
+        marginVertical: 12,
         marginHorizontal: 10,
-        alignItems: "center"
+        alignItems: "center",
     },
     inputText: {
         paddingHorizontal: 7,
@@ -147,6 +178,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
         marginVertical: 10
+    },
+    dateText: {
+        fontSize: Dimensions.get('window').scale < 2 ? 24 : 20,
+        color: "#646464",
+        fontWeight: "500",
+        textAlign: "center",
+        marginTop: 10
     },
 
 });

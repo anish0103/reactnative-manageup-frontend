@@ -27,7 +27,7 @@ const NavigationBar = props => {
         header: ({ navigation, route, options }) => {
           const title = getHeaderTitle(options, route.name);
 
-          return <Header title={title} />;
+          return <Header navigation={navigation} title={title} />;
         }
       }}
       initialRouteName="Home"

@@ -8,6 +8,7 @@ const ChatMainScreen = () => {
     const [chatShow, setChatShow] = useState(false)
     const [chatData, setChatData] = useState(undefined)
     const userprojects = useSelector(state => state.projects.userprojects)
+    const userdata = useSelector(state => state.users.userdata)
 
     const ToggleHandler = () => {
         setChatShow(!chatShow)
@@ -20,7 +21,7 @@ const ChatMainScreen = () => {
 
     if (chatShow) {
         return (
-            <ChatScreen data={chatData} isVisible={chatShow} ToggleHandler={ToggleHandler} />
+            <ChatScreen userdata={userdata} data={chatData} isVisible={chatShow} ToggleHandler={ToggleHandler} />
         )
     }
 
