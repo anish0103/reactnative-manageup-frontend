@@ -14,6 +14,9 @@ const ChatScreen = props => {
     const scrollViewRef = useRef();
     const [chatData, setChatData] = useState([])
     const [messageText, setMessageText] = useState("")
+    const [typing, setTyping] = useState(false)
+    const [typingName, setTypingName] = useState("")
+    let TypingTimeout;
 
     useEffect(() => {
         socket = io(backend)
@@ -40,13 +43,30 @@ const ChatScreen = props => {
         socket.emit('sendmessage', { data: data, roomid: props.data._id })
     }
 
+    const StopTyping = () => {
+        setTyping(false)
+        clearTimeout(TypingTimeout);
+    }
+
+    if (typing) {
+        TypingTimeout = setTimeout(StopTyping, 2000);
+    }
+
+    const TypingHandler = data => {
+        setTypingName(data)
+        setTyping(true)
+    }
+
     useEffect(() => {
         if (socket) {
             socket.on('connect', () => {
                 socket.emit('join', props.data._id)
             });
-            socket.on('resmessage', (data) => {
+            socket.on('resmessage', () => {
                 GetMessages()
+            })
+            socket.on('typing', (data) => {
+                TypingHandler(data);
             })
         }
     }, [])
@@ -56,12 +76,17 @@ const ChatScreen = props => {
     }, [])
 
     const SendMessageHandler = () => {
-        if(messageText.trim().length !==0) {
+        if (messageText.trim().length !== 0) {
             const Message = { value: props.userdata.Name, id: Math.random(), userid: props.userdata._id, Message: messageText }
             SendMessage(Message)
         } else {
             return AlertComponent("Error", "Please enter some text in message box.")
-        } 
+        }
+    }
+
+    const MessageTextHandler = data => {
+        setMessageText(data)
+        socket.emit('typing', { name: props.userdata.Name, roomid: props.data._id });
     }
 
     return (
@@ -93,9 +118,14 @@ const ChatScreen = props => {
                                 )
                             }
                         })}
+                    {typing && <View style={styles.chatItemLeft}>
+                        <View style={styles.chatTextLeft}>
+                            <Text style={styles.leftText}>{`${typingName}is typing...`}</Text>
+                        </View>
+                    </View>}
                 </ScrollView>
                 <View style={styles.inputContainer}>
-                    <TextInput autoFocus value={messageText} onChangeText={(data) => setMessageText(data)} style={styles.inputText} placeholder="Message..." />
+                    <TextInput autoFocus value={messageText} onChangeText={MessageTextHandler} style={styles.inputText} placeholder="Message..." />
                     <TouchableOpacity onPress={SendMessageHandler} style={styles.sendButton}>
                         <Text style={styles.sendText}>Send</Text>
                     </TouchableOpacity>
@@ -149,20 +179,20 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
     },
     chatTextLeft: {
-        paddingVertical: 15,
+        paddingVertical: 12,
         paddingHorizontal: 14,
         backgroundColor: "#f5f5f6",
         maxWidth: "70%",
-        borderRadius: 25,
+        borderRadius: 22,
         flexDirection: "column",
         marginVertical: 4,
     },
     chatTextRight: {
-        paddingVertical: 15,
+        paddingVertical: 12,
         paddingHorizontal: 14,
         backgroundColor: "#246bfb",
         maxWidth: "70%",
-        borderRadius: 25,
+        borderRadius: 22,
         flexDirection: "column",
         marginVertical: 4,
     },

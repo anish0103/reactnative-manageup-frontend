@@ -35,7 +35,7 @@ const ChatMainScreen = () => {
                         </View>
                         <View style={{ flex: 1 }}>
                             <Text style={styles.nameText}>{data.Name}</Text>
-                            <Text numberOfLines={1} style={styles.lastText}>Xyz: Update this thing!</Text>
+                            {data.Chat.length !==0 && <Text numberOfLines={1} style={styles.lastText}>{`${data.Chat[data.Chat.length-1].value}: ${data.Chat[data.Chat.length-1].Message}`}</Text>}
                         </View>
                     </TouchableOpacity>
                 ))}

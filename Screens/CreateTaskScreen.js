@@ -28,13 +28,13 @@ const CreateTaskScreen = props => {
 
     if (allUsers.length !== 0) {
         allUsers.forEach(element => {
-            ModifiedUsers.push({value: element.Name, _id: element._id, isChecked: false, Status: "Pending"});
+            ModifiedUsers.push({ value: element.Name, _id: element._id, isChecked: false, Status: "Pending" });
         });
     }
 
     if (userProjects.length !== 0) {
         userProjects.forEach(element => {
-            ModifiedProjects.push({value: element.Name, _id: element._id, isChecked: false, Members: element.Members});
+            ModifiedProjects.push({ value: element.Name, _id: element._id, isChecked: false, Members: element.Members });
         });
     }
 
@@ -64,7 +64,7 @@ const CreateTaskScreen = props => {
         if (name === undefined || description === undefined || startDate === undefined || endDate === undefined || name.trim().length === 0 || description.trim().length === 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || selectedContact.length === 0 || selectedProject.length === 0) {
             return AlertComponent("Warning", "Please enter some valid data!!");
         } else {
-            TaskDetails.Members.push({_id: userData._id, value: userData.Name, Status: "Pending"});
+            TaskDetails.Members.push({ _id: userData._id, value: userData.Name, Status: "Pending" });
             props.AddTaskDataHandler(TaskDetails)
             setName(undefined)
             setEndtDate(undefined)
@@ -104,13 +104,17 @@ const CreateTaskScreen = props => {
                     <View style={styles.selectContainer}>
                         <View style={{ width: '50%', alignItems: "center" }}>
                             <Text style={styles.inputName}>Select Project</Text>
-                            {userProjects.length === 0 ? <Text style={[styles.noText]}>No Projects For You</Text> : <RNMultiSelect
-                                width={'88%'}
-                                disableAbsolute
-                                data={ModifiedProjects}
-                                placeholder="Project"
-                                onSelect={(selectedItems) => setSelectedProject(selectedItems)}
-                            />}
+                            {userProjects.length === 0
+                                ? <View style={{ justifyContent: "center", height: 70 }}>
+                                    <Text style={{ textAlign: "center", fontSize: Dimensions.get('window').scale < 2 ? 17 : 15, fontWeight: "500", color: "#646464" }}>No Projects is there</Text>
+                                </View>
+                                : <RNMultiSelect
+                                    width={'88%'}
+                                    disableAbsolute
+                                    data={ModifiedProjects}
+                                    placeholder="Project"
+                                    onSelect={(selectedItems) => setSelectedProject(selectedItems)}
+                                />}
                         </View>
                         <View style={{ width: '50%', alignItems: "center" }}>
                             <Text style={styles.inputName}>Select Members</Text>

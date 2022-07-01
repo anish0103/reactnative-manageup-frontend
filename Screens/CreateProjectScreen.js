@@ -22,7 +22,7 @@ const CreateProjectScreen = props => {
 
     if (AllUsers.length !== 0) {
         AllUsers.forEach(element => {
-            ModifiedUsers.push({value: element.Name, _id: element._id, isChecked: false});
+            ModifiedUsers.push({ value: element.Name, _id: element._id, isChecked: false });
         });
     }
 
@@ -51,7 +51,7 @@ const CreateProjectScreen = props => {
         if (name === undefined || description === undefined || startDate === undefined || endDate === undefined || name.trim().length === 0 || description.trim().length === 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || selectedContact.length === 0) {
             return AlertComponent("Warning", "Please enter some valid data!!");
         } else {
-            ProjectDetails.Members.push({_id: userData._id, value: userData.Name});
+            ProjectDetails.Members.push({ _id: userData._id, value: userData.Name });
             props.AddProjectDataHandler(ProjectDetails)
             setName(undefined)
             setEndtDate(undefined)
@@ -88,13 +88,17 @@ const CreateProjectScreen = props => {
                         </TouchableOpacity>
                     </View>
                     <View>
-                        {AllUsers.length === 0 ? <Text>No user is there</Text> : <RNMultiSelect
-                            width={'100%'}
-                            disableAbsolute={true}
-                            data={ModifiedUsers}
-                            placeholder="Search/Select your contact"
-                            onSelect={(selectedItems) => setSelectedContact(selectedItems)}
-                        />}
+                        {AllUsers.length === 0
+                            ? <View style={{ justifyContent: "center", height: 70 }}>
+                                <Text style={{ textAlign: "center", fontSize: Dimensions.get('window').scale < 2 ? 17 : 15, fontWeight: "500", color: "#646464" }}>No User is there! Please tell them to signup.</Text>
+                            </View>
+                            : <RNMultiSelect
+                                width={'100%'}
+                                disableAbsolute={true}
+                                data={ModifiedUsers}
+                                placeholder="Search/Select your contact"
+                                onSelect={(selectedItems) => setSelectedContact(selectedItems)}
+                            />}
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={buttonHandler}>
