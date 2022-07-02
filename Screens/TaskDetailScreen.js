@@ -40,6 +40,14 @@ const TaskDetailScreen = props => {
                     />
                 </View>
                 <View style={styles.detailContainer}>
+                    <Text style={styles.headingText}>Duration</Text>
+                    <View style={styles.durationContainer}>
+                        <Text style={styles.durationText}>{props?.data?.StartDate}</Text>
+                        <Text style={styles.durationTimeline}> </Text>
+                        <Text style={styles.durationText}>{props?.data?.EndDate}</Text>
+                    </View>
+                </View>
+                <View style={styles.detailContainer}>
                     <Text style={styles.headingText}>Your Status</Text>
                     {UserStatus !== undefined && UserStatus[0].Status === "Pending" ? <Text style={styles.pendingText}>PENDING...</Text> : <Text style={styles.completeText}>COMPLETED</Text>}
                 </View>
@@ -98,13 +106,11 @@ const styles = StyleSheet.create({
     pendingText: {
         fontSize: Dimensions.get('window').scale < 2 ? 22 : 19,
         fontWeight: "500",
-        marginVertical: 6,
         color: "#f89117"
     },
     completeText: {
         fontSize: Dimensions.get('window').scale < 2 ? 22 : 19,
         fontWeight: "500",
-        marginVertical: 6,
         color: "#5bd28c"
     },
     TeamMemberContainer: {
@@ -116,6 +122,26 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         marginVertical: 10
     },
+    durationContainer: {
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10
+    },
+    durationTimeline: {
+        height: 40,
+        marginVertical: 6,
+        width: 2,
+        backgroundColor: '#f5f5f6',
+    },
+    durationText: {
+        fontSize: Dimensions.get('window').scale < 2 ? 17 : 14,
+        backgroundColor: '#f5f5f6',
+        width: '100%',
+        paddingVertical: 8,
+        borderRadius: 7,
+        textAlign: "center",
+        // color: '#646464'
+    }
 });
 
 export default TaskDetailScreen;
