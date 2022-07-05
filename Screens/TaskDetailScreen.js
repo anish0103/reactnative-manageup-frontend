@@ -1,7 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from "react-native";
 import Modal from "react-native-modal";
 import Carousel from 'react-native-snap-carousel'
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import TeamMemberCard from "../Components/TeamMemberCard";
 import ModalHeader from "../Components/ModalHeader";
@@ -10,7 +12,7 @@ const TaskDetailScreen = props => {
     const SLIDER_WIDTH = Dimensions.get('window').width
     const ITEM_WIDTH = Dimensions.get('window').width * 0.90
 
-    const UserStatus = props.data?.Members.filter(data => data._id === props.userid)
+    const CurrentUser = props.data?.Members.filter(data => data._id === props.userid)
 
     const StatusHandler = () => {
         props.TaskStatusChanger(props.data);
@@ -47,17 +49,33 @@ const TaskDetailScreen = props => {
                         <Text style={styles.durationText}>{props?.data?.EndDate}</Text>
                     </View>
                 </View>
-                <View style={styles.detailContainer}>
+                {CurrentUser !== undefined && CurrentUser[0].role === "Manager" && <View style={styles.detailContainer}>
+                    <Text style={styles.headingText}>Member Status</Text>
+                    <ScrollView style={{ height: 162 }}>
+                        {props?.data?.Members.map(data => {
+                            if (data._id !== props.userid) {
+                                return (
+                                    <View style={styles.memberStatusContainer}>
+                                        <Text style={{ fontSize: Dimensions.get('window').scale < 2 ? 18 : 15, flex: 1 }}>{data.value}</Text>
+                                        {data.Status === "Pending" ? <><AntDesign style={{paddingRight: 3}} name="clockcircleo" size={18} color="#f89117" /><Text style={styles.pendingText}>PENDING...</Text></> : <><MaterialIcons style={{paddingRight: 3}} name="done" size={20} color="#5bd28c" />
+                                            <Text style={styles.completeText}>COMPLETED</Text></>}
+                                    </View>
+                                )
+                            }
+                        })}
+                    </ScrollView>
+                </View>}
+                {CurrentUser !== undefined && CurrentUser[0].role === "Member" && <View style={styles.detailContainer}>
                     <Text style={styles.headingText}>Your Status</Text>
-                    {UserStatus !== undefined && UserStatus[0].Status === "Pending" ? <Text style={styles.pendingText}>PENDING...</Text> : <Text style={styles.completeText}>COMPLETED</Text>}
-                </View>
-                <View style={styles.buttonContainer}>
-                    {UserStatus !== undefined && UserStatus[0].Status === "Pending" ? <TouchableOpacity onPress={StatusHandler} activeOpacity={0.6} style={styles.button}>
+                    {CurrentUser !== undefined && CurrentUser[0].Status === "Pending" ? <Text style={styles.pendingText}>PENDING...</Text> : <Text style={styles.completeText}>COMPLETED</Text>}
+                </View>}
+                {CurrentUser !== undefined && CurrentUser[0].role === "Member" && <View style={styles.buttonContainer}>
+                    {CurrentUser !== undefined && CurrentUser[0].Status === "Pending" ? <TouchableOpacity onPress={StatusHandler} activeOpacity={0.6} style={styles.button}>
                         <Text style={styles.buttonText}>Completed</Text>
                     </TouchableOpacity> : <TouchableOpacity disabled activeOpacity={0.6} style={styles.button}>
                         <Text style={[styles.buttonText, { opacity: 0.5 }]}>Completed</Text>
                     </TouchableOpacity>}
-                </View>
+                </View>}
             </View>
         </Modal>
     )
@@ -104,12 +122,12 @@ const styles = StyleSheet.create({
         textAlign: "justify"
     },
     pendingText: {
-        fontSize: Dimensions.get('window').scale < 2 ? 22 : 19,
+        fontSize: Dimensions.get('window').scale < 2 ? 19 : 18,
         fontWeight: "500",
         color: "#f89117"
     },
     completeText: {
-        fontSize: Dimensions.get('window').scale < 2 ? 22 : 19,
+        fontSize: Dimensions.get('window').scale < 2 ? 19 : 18,
         fontWeight: "500",
         color: "#5bd28c"
     },
@@ -141,6 +159,16 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         textAlign: "center",
         // color: '#646464'
+    },
+    memberStatusContainer: {
+        width: '100%',
+        height: 65,
+        backgroundColor: "#f5f5f6",
+        alignItems: "center",
+        flexDirection: "row",
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        marginVertical: 8
     }
 });
 

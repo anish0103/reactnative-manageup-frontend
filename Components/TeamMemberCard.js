@@ -8,6 +8,7 @@ const TeamMemberCard = ({item}) => {
             </View>
             <View>
                 <Text style={styles.memberName}>{item.value}</Text>
+                <Text style={styles.memberName}>{item?.role}</Text>
             </View>
         </View>
     );

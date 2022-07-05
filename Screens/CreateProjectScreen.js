@@ -22,7 +22,9 @@ const CreateProjectScreen = props => {
 
     if (AllUsers.length !== 0) {
         AllUsers.forEach(element => {
-            ModifiedUsers.push({ value: element.Name, _id: element._id, isChecked: false });
+            if(element._id !== userData._id) {
+                ModifiedUsers.push({ value: element.Name, _id: element._id, isChecked: false, role: "Member" });
+            }
         });
     }
 
@@ -51,7 +53,7 @@ const CreateProjectScreen = props => {
         if (name === undefined || description === undefined || startDate === undefined || endDate === undefined || name.trim().length === 0 || description.trim().length === 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || selectedContact.length === 0) {
             return AlertComponent("Warning", "Please enter some valid data!!");
         } else {
-            ProjectDetails.Members.push({ _id: userData._id, value: userData.Name });
+            ProjectDetails.Members.push({ _id: userData._id, value: userData.Name, role: "Manager" });
             props.AddProjectDataHandler(ProjectDetails)
             setName(undefined)
             setEndtDate(undefined)

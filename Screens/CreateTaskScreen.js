@@ -21,14 +21,14 @@ const CreateTaskScreen = props => {
     const userData = useSelector(state => state.users.userdata);
     const userProjects = useSelector(state => state.projects.userprojects)
 
-    console.log(selectedProject)
-
     let ModifiedUsers = [];
     let ModifiedProjects = [];
 
     if (allUsers.length !== 0) {
         allUsers.forEach(element => {
-            ModifiedUsers.push({ value: element.Name, _id: element._id, isChecked: false, Status: "Pending" });
+            if (element._id !== userData._id) {
+                ModifiedUsers.push({ value: element.Name, _id: element._id, isChecked: false, Status: "Pending", role: "Member" });
+            }
         });
     }
 
@@ -64,7 +64,7 @@ const CreateTaskScreen = props => {
         if (name === undefined || description === undefined || startDate === undefined || endDate === undefined || name.trim().length === 0 || description.trim().length === 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || selectedContact.length === 0 || selectedProject.length === 0) {
             return AlertComponent("Warning", "Please enter some valid data!!");
         } else {
-            TaskDetails.Members.push({ _id: userData._id, value: userData.Name, Status: "Pending" });
+            TaskDetails.Members.push({ _id: userData._id, value: userData.Name, Status: "Pending", role: "Manager" });
             props.AddTaskDataHandler(TaskDetails)
             setName(undefined)
             setEndtDate(undefined)
