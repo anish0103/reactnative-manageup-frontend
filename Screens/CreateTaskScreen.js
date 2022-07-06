@@ -34,7 +34,13 @@ const CreateTaskScreen = props => {
 
     if (userProjects.length !== 0) {
         userProjects.forEach(element => {
-            ModifiedProjects.push({ value: element.Name, _id: element._id, isChecked: false, Members: element.Members });
+            element.Members.map(data => {
+                if (data._id === userData._id) {
+                    if (data.role === "Manager") {
+                        ModifiedProjects.push({ value: element.Name, _id: element._id, isChecked: false, Members: element.Members });
+                    }
+                }
+            })
         });
     }
 
@@ -104,7 +110,7 @@ const CreateTaskScreen = props => {
                     <View style={styles.selectContainer}>
                         <View style={{ width: '50%', alignItems: "center" }}>
                             <Text style={styles.inputName}>Select Project</Text>
-                            {userProjects.length === 0
+                            {userProjects.length === 0 || ModifiedProjects.length === 0
                                 ? <View style={{ justifyContent: "center", height: 70 }}>
                                     <Text style={{ textAlign: "center", fontSize: Dimensions.get('window').scale < 2 ? 17 : 15, fontWeight: "500", color: "#646464" }}>No Projects is there</Text>
                                 </View>
