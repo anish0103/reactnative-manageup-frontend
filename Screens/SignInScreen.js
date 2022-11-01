@@ -39,6 +39,7 @@ const SignInScreen = props => {
 
     const SignUpFunction = async data => {
         try {
+
             await dispatch(createUser(data));
             MoveHandler()
         } catch (error) {

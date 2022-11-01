@@ -18,7 +18,7 @@ export const getAllProjects = () => {
                 data: data
             })
         } catch (error) {
-            throw "Something went wrong!! Please check your internet connection or try again later."
+            throw error
         }
     }
 }
@@ -44,7 +44,8 @@ export const createProject = data => {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
             })
             const projectdata = await response.json()
@@ -56,7 +57,7 @@ export const createProject = data => {
                 data: projectdata
             })
         } catch (error) {
-            throw "Something went wrong!! Please check your internet connection or try again later."
+            throw error
         }
     }
 }
@@ -69,7 +70,8 @@ export const createTask = (id, data) => {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
             })
             const projectdata = await response.json()
@@ -81,7 +83,7 @@ export const createTask = (id, data) => {
                 data: data
             })
         } catch (error) {
-            throw "Something went wrong!! Please check your internet connection or try again later."
+            throw error
         }
     }
 }
@@ -94,7 +96,8 @@ export const updateTaskStatus = (projectid, userid, data) => {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
             })
             const projectdata = await response.json()
@@ -107,7 +110,7 @@ export const updateTaskStatus = (projectid, userid, data) => {
                 data: projectdata
             })
         } catch (error) {
-            throw "Something went wrong!! Please check your internet connection or try again later."
+            throw error
         }
     }
 }

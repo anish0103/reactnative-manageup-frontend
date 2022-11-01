@@ -17,7 +17,7 @@ export const getAllUsers = () => {
                 data: data
             })
         } catch (error) {
-            throw "Something went wrong!! Please check your internet connection or try again later."
+            throw error
         }
     }
 }
@@ -30,7 +30,8 @@ export const createUser = data => {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
             })
             const userdata = await response.json()
@@ -42,7 +43,7 @@ export const createUser = data => {
                 data: userdata
             })
         } catch (error) {
-            throw "Something went wrong!! Please check your internet connection or try again later."
+            throw error
         }
     }
 }
@@ -55,7 +56,8 @@ export const loginUser = data => {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
             })
             const userdata = await response.json()
@@ -67,7 +69,7 @@ export const loginUser = data => {
                 data: userdata
             })
         } catch (error) {
-            throw "Something went wrong!! Please check your internet connection or try again later."
+            throw error
         }
     }
 }
@@ -86,7 +88,7 @@ export const getUserById = id => {
                 data: userdata
             })
         } catch (error) {
-            throw "Something went wrong!! Please check your internet connection or try again later."
+            throw error
         }
     }
 }

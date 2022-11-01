@@ -2,6 +2,7 @@
   "expo": {
     "name": "ManageUp",
     "slug": "ManageUp",
+    "description": "This is a application to manage the workflows of the project and the task given to the members",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,9 +22,11 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.anishcompany.manageup",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#246bfb"
       }
     },
     "web": {
